@@ -1,0 +1,138 @@
+body {
+    font-family: Arial, sans-serif;
+     padding-top: 150px;
+  }
+
+  .banner{
+    position: absolute;
+    background-image: linear-gradient( to bottom right, #91defe, #99c0f9, #bdb6ec, #d7b3e3, #efb3d5, #f9bccc);
+    width: 100%;
+    height: 240px;
+    z-index: -1;
+    top: 0;
+    outline-offset: 4px;
+    outline-style: solid;
+  }
+
+  .icon{
+    text-align: center;
+  }
+
+  .icon img{
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    outline-width: 2px;
+    outline-offset: 4px;
+    outline-style: solid;
+  }
+
+  a{
+    text-decoration: none;
+    color: #333333;
+  }
+
+  footer{
+    align-items: center;
+    text-align: center;
+  }
+
+  h1 {
+    color: #333333;
+margin-bottom: 24px;
+  }
+
+  h2 {
+    color: #333333;
+  }
+  
+  p {
+    color: #666666;
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+  }
+
+  .container{
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .row{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .card{
+    width: 160px;
+    height: 180px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 14px;
+    outline-width: 2px;
+    outline-style: solid;
+  }
+
+  .gridbook{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 2px;
+    gap: 15px;
+  }
+  .gridbook a{
+    font-size: 10px;
+    outline-width: 2px;
+    outline-offset: 0px;
+    outline-style: solid;
+    border-radius: 10px;
+    padding: 5px;
+    height: 40px;
+    
+  }
+
+  .infobar{
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 600px;
+    height: 80px;
+    outline-width: 2px;
+    outline-offset: 0px;
+    outline-style: solid;
+  }
+
+
+  .inviteBtn{
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    width: 160px;
+    height: 40px;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #3e3e3e;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    outline-width: 2px;
+    outline-offset: 4px;
+    outline-style: solid;
+  }
+  .inviteBtn p{
+    color: #fff;
+    font-size: 12px;
+    padding-top: 6px;
+  }
+
+

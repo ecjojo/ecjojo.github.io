@@ -1,26 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Belanosima&family=Lato&display=swap');
 * {
     margin: 0;
     padding: 0;
+    font-family: 'Belanosima', sans-serif;
 }
 
 body {
     font-family: Arial, sans-serif;
+    background-color: #dedec9;
 }
 
 .nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    background-color: #333;
+    background-color: #393333;
     width: 100%;
-    list-style-type: none;
-    padding-top: 10px;
     justify-content: flex-end;
+    padding-top: 10px;
+    gap: 0px;
 }
 
 .nav p {
-    padding-right: 10px;
+    padding-right: 15px;
     color: #c4c4c4;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
 }
 
 .banner {
@@ -29,12 +33,12 @@ body {
     top: 0;
 }
 
-.icon {
+.logo {
     text-align: center;
     padding-top: 50px;
 }
 
-.icon img {
+.logo img {
     width: 160px;
     height: 160px;
     border-radius: 50%;
@@ -68,18 +72,25 @@ footer {
 
 h1 {
     color: #333333;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
+    font-size: 28px;
 }
 
 h2 {
     color: #333333;
+    font-size: 16px;
+}
+
+h4 {
+    color: #333333;
+    font-size: 12px;
 }
 
 p {
     color: #666666;
     font-size: 14px;
     margin-bottom: 10px;
-    margin-top: 0px;
+    margin-top: 1px;
 }
 
 .container {
@@ -94,12 +105,12 @@ p {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 .card {
     width: 180px;
-    height: 200px;
+    height: 190px;
     padding: 5px;
     border-radius: 10px;
     text-align: center;
@@ -112,7 +123,7 @@ p {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    padding: 10px;
+    padding: 8px;
     gap: 10px;
 }
 
@@ -125,20 +136,32 @@ p {
 .gridbook img {
     width: 40px;
     border-radius: 5px;
+    padding: 1px;
 }
 
 .infobar {
     display: flex;
     border-radius: 10px;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    width: 610px;
-    height: 80px;
+    width: 570px;
+    height: 60px;
     outline-width: 2px;
     outline-offset: 0px;
     outline-style: solid;
+    padding: 15px;
+    gap: 20px;
+}
+
+.infobar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    justify-content: center;
+    padding: 5px;
 }
 
 .inviteBtn {

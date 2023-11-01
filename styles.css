@@ -120,7 +120,7 @@ p {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    gap: 40px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -128,10 +128,10 @@ p {
 .card {
     width: 160px;
     height: 160px;
-    padding: 10px;
+    padding: 20px;
     border-radius: 10px;
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
     outline-width: 2px;
     outline-offset: 6px;
     outline-style: solid;
@@ -146,14 +146,18 @@ p {
 
 .card p {
     color: #c4c4c4;
+    font-size: 16px;
 }
 
 .card a {
     color: #c4c4c4;
+
 }
 
 .card h4 {
     color: #c4c4c4;
+    font-size: 14px;
+    
 }
 
 .gridbook {
@@ -252,9 +256,9 @@ p {
 }
 
 .button-row a {
-    font-size: 11px;
+    font-size: 14px;
     padding: 5px;
-    width: 75px;
+    width: 95px;
     border-radius: 10px;
     outline-width: 2px;
     outline-offset: 3px;

@@ -72,6 +72,22 @@ body {
     gap: 10px;
 }
 
+.bio p{
+    color: #333333;
+        
+    }
+    
+
+.sub-bio{
+    padding-top: 10px;
+    gap: 10px;
+}
+
+.sub-bio p{
+color: #c4c4c4;
+    
+}
+
 a {
     text-decoration: none;
     color: #333333;
@@ -122,64 +138,29 @@ p {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
+    gap: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
 .card {
-    width: 160px;
-    height: 160px;
-    padding: 20px;
+    width: 228px;
+    height: 128px;
     border-radius: 10px;
-    text-align: center;
     font-size: 16px;
-    outline-width: 2px;
-    outline-offset: 6px;
     outline-style: solid;
-    outline-color: #c4c4c4;
-    background-color: #ffffff00;
+    background-color: #000000;
+    text-align: left;
 }
 
 .card img {
-    width: 50px;
-    border-radius: 10px;
+    width: 30px;
+    border-radius: 5px;
 }
 
 .card p {
-    color: #c4c4c4;
+    color: #333333;
     font-size: 16px;
-}
-
-.card a {
-    color: #c4c4c4;
-
-}
-
-.card h4 {
-    color: #c4c4c4;
-    font-size: 14px;
-    
-}
-
-.gridbook {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    padding: 2px;
-    gap: 10px;
-}
-
-.gridbook a {
-    font-size: 10px;
-    outline-style: solid;
-    outline-width: 0px;
-}
-
-.gridbook img {
-    width: 40px;
-    border-radius: 5px;
-    padding: 1px;
 }
 
 .inviteBtn {

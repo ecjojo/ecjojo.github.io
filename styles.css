@@ -84,8 +84,14 @@ body {
     color: #c4c4c4;
 }
 
+a {
+    text-decoration: none;
+    color: #333333;
+    transition: transform 0.3s ease;
+}
+
 a img:hover {
-    transform: translateX(2px) translateY(-2px);
+    transform: scale(1.05);
 }
 
 footer {
@@ -116,11 +122,6 @@ p {
     margin-bottom: 10px;
     margin-top: 1px;
     line-height: 1.2;
-}
-
-a {
-    text-decoration: none;
-    color: #333333;
 }
 
 .container {

@@ -152,7 +152,8 @@ p {
 
 .card img {
     width: 30px;
-    border-radius: 5px;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
 }
 
 .card p {
@@ -246,6 +247,11 @@ p {
     outline-color: #333;
     background-color: #333;
     color: #c4c4c4;
+    transition: transform 0.3s ease;
+}
+
+.button-row a:hover {
+    transform: scale(1.05);
 }
 
 .oc-play {

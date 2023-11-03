@@ -37,8 +37,6 @@ body {
     display: flex;
     width: 100%;
     top: 0;
-
-    
 }
 
 .logo {
@@ -72,25 +70,18 @@ body {
     gap: 10px;
 }
 
-.bio p{
+.bio p {
     color: #333333;
-        
-    }
-    
+}
 
-.sub-bio{
+.sub-bio {
+    width: 228px;
     padding-top: 10px;
     gap: 10px;
 }
 
-.sub-bio p{
-color: #c4c4c4;
-    
-}
-
-a {
-    text-decoration: none;
-    color: #333333;
+.sub-bio p {
+    color: #c4c4c4;
 }
 
 a img:hover {
@@ -127,6 +118,11 @@ p {
     line-height: 1.2;
 }
 
+a {
+    text-decoration: none;
+    color: #333333;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -138,7 +134,7 @@ p {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -249,4 +245,11 @@ p {
     outline-color: #333;
     background-color: #333;
     color: #c4c4c4;
+}
+
+.oc-play {
+    display: flex;
+    text-align: center;
+    width: 105px;
+    gap: 10px;
 }

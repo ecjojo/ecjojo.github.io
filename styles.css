@@ -33,6 +33,19 @@ body {
     border-radius: 10px;
 }
 
+.floating-msg {
+    font-family: 'Belanosima', sans-serif;
+    background-color: #333333;
+    padding: 25px;
+    font-size: 12px;
+    border-radius: 15px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    transition: transform 0.3s ease-out;
+    box-shadow: 0 0 8px rgba(17, 17, 17, 0.5);
+}
+
 .banner {
     display: flex;
     width: 100%;
@@ -51,6 +64,7 @@ body {
     outline-width: 2px;
     outline-offset: 4px;
     outline-style: solid;
+    background-color: #333333;
 }
 
 .quick-icon {

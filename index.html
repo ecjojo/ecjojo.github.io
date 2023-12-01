@@ -11,7 +11,16 @@
     <script src="https://kit.fontawesome.com/8bc3a4b767.js" crossorigin="anonymous"></script>
 </head>
 
-
+<script>
+    window.addEventListener('scroll', function() {
+        var floatingDiv = document.querySelector('.floating-msg');
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+        var targetX = windowWidth - floatingDiv.offsetWidth - 30;
+        var targetY = windowHeight - floatingDiv.offsetHeight - 30;
+        floatingDiv.style.transform = 'translate(' + (targetX + scrollX) + 'px, ' + (targetY + scrollY) + 'px)';
+    });
+</script>
 
 <div class="nav">
 
@@ -25,45 +34,38 @@
     <table id="contribution-table">
         <!-- The table will be generated here -->
     </table>
+
+    <div class="floating-msg">
+        <p style="color:#c4c4c4;">COMISSION OPEN (FEB2024)</p>
+        <a style="color:#c4c4c4;">➔ My Portfolio & Pricing</a>
+    </div>
 </div>
 
 
 
 <div class="logo">
-    <img src="https://pbs.twimg.com/profile_images/1702647073584398336/iPp_Ha53_400x400.jpg">
+    <img src="Images/logo_1.png">
 </div>
 
 <div class="container">
-    <h1 class="id">heiume
-        <a target="_blank " href="https://twitter.com/heiume3D ">
-
-
-            <span style="font-size: 24px; ">𝕏</span>
-
-
-        </a>
+    <h1 class="id">heiume studio
     </h1>
+
 
 </div>
 <div class="container">
 
     <div class="bio" style="width: 500px; ">
         <p style=" line-height: 2.2; ">
-            Hey there! I'm Jenny, a solo developer / full-stack digital creator.
+            👋 I'm Jenny, a Solo Developer / Full-Stack Digital Creator.
         </p>
-
-        <p style=" line-height: 2.2; ">
-            I'm working on:
-            <span class="tag"> AI Waifus illustrations & manga (2D / Realistic)</span>|
-            <span class="tag">Dubbing Work</span> |
-            <span class="tag">3D Modeling - Characters & Props </span> |
-
-            <span class="tag">Apps and Games Development</span>
-        </p>
-
+        <a target="_blank " href="https://twitter.com/heiume_ai">
+            <p style=" line-height: 2.2;padding-top: 0px;">Follow my 𝕏 to get all latest updateds!
+                <span>@heiume_ai</span></p>
+        </a>
     </div>
 
-    <div class=" container " style="padding: 50px; ">
+    <div class=" container " style="padding-top: 40px;padding-bottom: 80px; ">
         <a target="_blank " href="https://discord.gg/Jw4QshdvKF ">
             <div class="inviteBtn ">
                 <svg xmlns="http://www.w3.org/2000/svg " x="0px " y="0px " width="20 " height="20 " viewBox="0 0 50 50 " style="fill: #dddddd; ">
@@ -84,9 +86,6 @@
             </div>
         </a>
 
-        <a target="_blank " href="https://twitter.com/heiume_ai">
-            <p style=" line-height: 2.2;padding-top: 30px;">Follow my 𝕏 to get all latest updateds!</p>
-        </a>
 
     </div>
 
@@ -99,25 +98,111 @@
 
 
 <div class="container " style=" padding: 80px; background-color: rgb(33, 33, 33); ">
-    <h1 style="color:#c4c4c4;">My Projects</h1>
+    <h1 style="color:#c4c4c4; ">My Projects</h1>
     <br></br>
 
     <div class="grid-container ">
 
 
 
+        <a target="_blank " href="https://magic.cat/ ">
+            <div class="card ">
+
+                <img style="width: 100%; height: 100%; " src="Images/magic.png ">
+
+            </div>
+            <div class="sub-bio ">
+                <p>Magic Cat (Ondev)</p>
+                <p style="font-size: 13px; "> Stable Diffusion Prompt Book</p>
+                <p style="font-size: 13px; "> Openpose Drawtool</p>
+            </div>
+        </a>
+
+
+
+        <a target="_blank " href="https://www.patreon.com/heiume ">
+            <div class="card ">
+
+                <img style="position: absolute; z-index: 1; " src="https://blog.audiosocket.com/wp-content/uploads/2020/11/patreon-creators-patreon.png ">
+                <img style="width: 100%; height: 100%; " src="Images/waifus01.png ">
+
+
+            </div>
+            <div class="sub-bio ">
+                <p>NSFW Originals AI Manga</p>
+                <p style="font-size: 14px; "> (DEBUT 2024)</p>
+
+            </div>
+        </a>
+
+
+        <a target="_blank " href="https://www.instagram.com/ecjojo/ ">
+            <div class="card ">
+
+
+                <img style=" width: 100%; height: 100%; " src="Images\kana.png ">
+
+
+            </div>
+            <div class="sub-bio ">
+                <p>Realistic AIbot Girl </p>
+                <p style=" font-size: 12px; ">FUN | WORKFLOW | LIFE STYLE </p>
+
+
+            </div>
+        </a>
+
+
+        <a target="_blank " href="https://heiume.github.io/toolbox/ ">
+
+            <div class="card ">
+                <!-- <img style="position: absolute; z-index: 1; " src="https://images.emojiterra.com/twitter/v13.1/512px/1f9f0.png ">
+                -->
+                <img style=" width: 100%; height: 100%; " src="Images\toolbox.png ">
+
+            </div>
+            <div class="sub-bio ">
+                <p>Toolbox</p>
+                <p style="font-size: 12px; ">FONT | EMOJI | SYMBOL</p>
+            </div>
+
+        </a>
+
+        <a target="_blank " href="https://www.youtube.com/@heiume ">
+
+            <div class="card ">
+                <img style="width: 100%; height: 100%; " src="Images/youtube.png ">
+
+            </div>
+            <div class="sub-bio ">
+                <p>Youtube</p>
+                <p style="font-size: 12px; ">DEV | GAME | FOOD</p>
+            </div>
+        </a>
+
+        <a target="_blank " href="https://heiume.blogspot.com/ ">
+            <div class="card ">
+
+                <img style="width: 100%; height: 100%; " src="Images/blog.png ">
+
+            </div>
+            <div class="sub-bio ">
+                <p>heiume note</p>
+                <p style="font-size: 12px; "> 遊戲攻略 (不定期更新)</p>
+            </div>
+        </a>
 
         <a target="_blank " href="https://heiume.gumroad.com/ ">
-            <div class="card">
+            <div class="card ">
 
-                <img style="width: 100%; height: 100%;" src="Images/gunroad.png">
+                <img style="width: 100%; height: 100%; " src="Images/gunroad.png ">
 
 
             </div>
 
             <div class="sub-bio ">
 
-                <div style="display: flex;padding-top: 10px;  justify-content: center; gap: 5px; ">
+                <div style="display: flex;padding-top: 10px; justify-content: center; gap: 5px; ">
 
                     <div style="width:40px; ">
                         <img style="width:26px; height: 21px; " src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Blender_logo_no_text.svg/512px-Blender_logo_no_text.svg.png ">
@@ -125,9 +210,9 @@
                     </div>
                     <div style="width:80px; ">
                         <img style="width:25px; height: 25px; " src="https://cdn-icons-png.flaticon.com/512/5969/5969346.png ">
-                        <p style="font-size: 12px; ">Unity Game Templates</p>
+                        <p style="font-size: 12px; ">Game Assets</p>
                     </div>
-                    <div style="width:40px;">
+                    <div style="width:40px; ">
                         <img style="width:23px; height: 23px; " src="https://cdn-icons-png.flaticon.com/128/6707/6707083.png ">
                         <p style="font-size: 12px; ">Sounds Pack</p>
                     </div>
@@ -135,98 +220,11 @@
             </div>
         </a>
 
-        <a target="_blank " href="https://www.patreon.com/heiume ">
+        <a target="_blank " href="https://playground.stream/ ">
             <div class="card ">
 
-                <img style="position: absolute; z-index: 1; " src="https://blog.audiosocket.com/wp-content/uploads/2020/11/patreon-creators-patreon.png ">
-                <img style="width: 100%; height: 100%;" src="Images/waifus01.png">
-
-
-            </div>
-            <div class="sub-bio ">
-                <p>NSFW Originals & Fanarts</p>
-                <p style="font-size: 14px; "> illustrations & Manga | Anime Fanarts</p>
-                <p style="font-size: 14px; "> (Coming soon!)</p>
-
-            </div>
-        </a>
-
-        <a target="_blank " href="https://www.instagram.com/ecjojo/ ">
-            <div class="card">
-
-
-                <img style="  
-                    width: 100%; height: 100%;" src="Images\kana.png">
-
-
-            </div>
-            <div class="sub-bio ">
-                <p style="">Realistic AI Girl </p>
-                <p style=" font-size: 12px;"> </p>
-
-
-            </div>
-        </a>
-
-
-
-        <a target="_blank " href="https://heiume.github.io/toolbox/ ">
-
-            <div class="card">
-                <!-- <img style="position: absolute; z-index: 1; " src="https://images.emojiterra.com/twitter/v13.1/512px/1f9f0.png ">
-                -->
-                <img style="  
-                width: 100%; height: 100%;" src="Images\toolbox.png">
-
-            </div>
-            <div class="sub-bio">
-                <p>Toolbox</p>
-                <p style="font-size: 12px; "></p>
-            </div>
-
-        </a>
-
-        <a target="_blank " href="https://www.youtube.com/@heiume ">
-
-            <div class="card">
-                <img style="width: 100%; height: 100%;" src="Images/youtube.png">
-
-            </div>
-            <div class="sub-bio ">
-                <p>Youtube</p>
-                <p style="font-size: 12px; "></p>
-            </div>
-        </a>
-
-        <a target="_blank " href="https://heiume.blogspot.com/ ">
-            <div class="card">
-
-                <img style="width: 100%; height: 100%;" src="Images/blog.png">
-
-            </div>
-            <div class="sub-bio ">
-                <p>heiume note</p>
-                <p style="font-size: 12px; "> </p>
-            </div>
-        </a>
-
-        <a target="_blank " href="https://magic.cat/ ">
-            <div class="card">
-
-                <img style="width: 100%; height: 100%;" src="Images/magic.png">
-
-            </div>
-            <div class="sub-bio ">
-                <p>Magic Cat (Ondev)</p>
-                <p style="font-size: 13px; "> Stable Diffusion Prompt Book</p>
-            </div>
-        </a>
-
-        <a target="_blank " href="https://playground.stream/">
-            <div class="card">
-
                 <!-- <img src="https://pbs.twimg.com/profile_images/1561664900300443649/5I8FTwnN_400x400.jpg "> -->
-                <img style="width: 100%; height: 100%;" src="Images/playground.png">
+                <img style="width: 100%; height: 100%; " src="Images/playground.png ">
 
 
             </div>
@@ -237,12 +235,12 @@
             </div>
         </a>
 
-        <a target="_blank " href="https://www.avatech.ai/">
-            <div class="card">
+        <a target="_blank " href="https://www.avatech.ai/ ">
+            <div class="card ">
 
                 <!-- <img src="https://pbs.twimg.com/profile_images/1663824918105194498/6jbG-rw-_400x400.jpg ">
                 -->
-                <img style="width: 100%; height: 100%;" src="Images/lab.png">
+                <img style="width: 100%; height: 100%; " src="Images/lab.png ">
 
 
             </div>
@@ -253,15 +251,13 @@
         </a>
 
     </div>
-    <p style=" width: 400px; line-height: 2.2; color: #c4c4c4; padding-top:80px ;">
-        If you are interested in supporting my work, you can check out my Gumroad and Patreon (NSFW), or Buy Me a Coffee.
+    <p style=" width: 500px; line-height: 2.2; color: #c4c4c4; padding-top:80px ; ">
+        If you are interested in supporting my work, you can Buy Me a Coffee.
 
 
-        <a target="_blank" href="https://www.buymeacoffee.com/heiume">
+        <a target="_blank " href="https://www.buymeacoffee.com/heiume ">
 
-            <img style="width: 30px; border-radius: 10px; outline-width: 2px;
-            outline-offset: 0px;
-            outline-style: solid; " src="https://logowik.com/content/uploads/images/buy-me-a-coffee6984.jpg">
+            <img style="width: 30px; border-radius: 10px; outline-width: 2px; outline-offset: 0px; outline-style: solid; " src="https://logowik.com/content/uploads/images/buy-me-a-coffee6984.jpg ">
 
 
         </a>
@@ -275,7 +271,7 @@
 
 <hr></hr>
 
-<div class="container" style="padding: 80px;">
+<div class="container " style="padding: 80px; ">
 
 
     <h1>my Waifu OC's</h1>
@@ -308,7 +304,7 @@
 <hr></hr>
 <div class="container " style=" padding: 100px; background-color: rgb(33, 33, 33); ">
 
-    <h1 style="color:#c4c4c4;">Other bookmarks</h1>
+    <h1 style="color:#c4c4c4; ">Other bookmarks</h1>
     <br></br>
     <div class="row ">
 
@@ -337,7 +333,7 @@
         <div class="bookmark-cube ">
             <a target="_blank " href="https://www.rhythm.game/ ">
 
-                <img src="https://assetstorev1-prd-cdn.unity3d.com/key-image/1341d1d6-1ef7-4521-9ed7-a511854b6171.png">
+                <img src="https://assetstorev1-prd-cdn.unity3d.com/key-image/1341d1d6-1ef7-4521-9ed7-a511854b6171.png ">
                 <div class="bio ">
                     <p>Rhythm Game Starter (Unity Dev)</p>
                 </div>
@@ -347,7 +343,7 @@
         <div class="bookmark-cube ">
             <a target="_blank " href="https://www.findmyports.com/ ">
 
-                <img src="https://www.findmyports.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fapp-icon.4c4d6236.png&w=256&q=75">
+                <img src="https://www.findmyports.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fapp-icon.4c4d6236.png&w=256&q=75 ">
 
                 <div class="bio ">
                     <p>Developer Tool | Port's Visualization Panel（macOS） </p>
@@ -360,18 +356,18 @@
 
 
 
-    <p style="color: #e4e4e7;padding-top: 80px;">Any commission request, please feel free to contact me:
+    <p style="color: #e4e4e7;padding-top: 80px; ">Any commission request, please feel free to contact me:
     </p>
-    <p style="color: #e4e4e7;">heiumestudio@gmail.com
+    <p style="color: #e4e4e7; ">heiumestudio@gmail.com
     </p>
 
 </div>
 
 
-<footer style="background-color:#333; padding: 50px;     display: flex;   flex-direction: column;">
-    <img style="width: 130PX; height: 60PX;  padding-bottom: 20px;" src="Images\logo_3.png">
+<footer style="background-color:#333; padding: 50px; display: flex; flex-direction: column; ">
+    <img style="width: 130PX; height: 60PX; padding-bottom: 20px; " src="Images\logo_3.png ">
 
-    <a style="   color: #c4c4c4;" target="_blank " href="https://github.com/heiume "> © 2023 heiume studio</a>
+    <a style=" color: #c4c4c4; " target="_blank " href="https://github.com/heiume "> © 2023 heiume studio</a>
 
 </footer>
 

@@ -1,12 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Belanosima&family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Belanosima', sans-serif;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 800;
+
 }
 
 body {
-    font-family: Arial, sans-serif;
+
     background-color: #e4e4e7;
 }
 
@@ -279,3 +285,20 @@ p {
     width: 105px;
     gap: 10px;
 }
+
+
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+th, td {
+    border-bottom: 0.5px solid #ddd;
+    text-align: left;
+  }
+  
+
+  hr{
+    border-bottom: 1px solid #ddd;
+  }

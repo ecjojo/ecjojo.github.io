@@ -1,12 +1,181 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&family=Jura:wght@300..700&family=Libre+Barcode+39&family=Major+Mono+Display&family=Wavefont:wght@4..1000&display=swap');
 
 
 * {
+    font-family: "Jura", sans-serif;
     margin: 0;
     padding: 0;
-    font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    font-weight: 800;
-    background-color: aliceblue;
+    font-weight: 400;
+    color:#FFF;
+    letter-spacing:2px;
+}
+
+body{
+    background-color: #151515;
+    background-image: url("https://www.yudiz.com/codepen/photography-banner/frame.png");
+}
+
+p{
+    font-size: 2.5vw;
+}
+
+h1{
+    font-size: 9vw;
+    font-weight: 700;
+}
+
+h2{
+    font-size: 30px;
+    color:#f1e728;
+}
+
+h3{
+    position: absolute;
+    left: 40px;
+    font-size: 999px;
+    z-index: -5;
+    overflow: hidden;
+
+}
+
+.top-container{
+    display:flex;
+    position: absolute;
+    top: 40px;
+    left: 42px;
+    gap: 1vw;
+}
+
+#github-url{
+    font-family: "Major Mono Display", monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing:6px;
+    color:#f1e728;
+}
+
+#wavefont{
+    font-family: "Wavefont", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+      "ROND" 100,
+      "YELA" -100;
+}
+
+.decorate{
+    display: flex;
+}
+
+.decorate-row{
+    position: absolute;
+    z-index: -1;
+}
+
+#decorate-line-1{
+    width: 82vw;
+    height: 30px;
+    background-color: #f1e728;
+}
+
+#decorate-line-2{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 30px 30px 0 0;
+    border-color: #f1e728 transparent transparent transparent;
+}
+
+#decorate-line-3{
+    width: 30px;
+    height: 500px;
+    background-color: #f1e728;
+}
+
+#decorate-line-4{
+    width: 0;
+    height: 400px;
+    border-style: solid;
+    border-width: 30px 30px 0 0;
+    border-color: #f1e728 transparent transparent transparent;
+}
+
+#line-1{
+    margin-top: 6px;
+    width: 66vw;
+    height: 2px;
+    background-color: #f1e728;
+}
+#line-2{
+    width: 22vw;
+    height: 5px;
+    background-color: #f1e728;
+}
+
+#barcode{
+    position: absolute;
+    top: 16vh;
+    left: 40px;
+    font-family: "Libre Barcode 39", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    writing-mode: vertical-rl;
+    font-size: 2vh;
+    letter-spacing:4px;
+    color:#f1e728;
+}
+
+.main-container{  
+    padding: 20vh;
+}
+
+.url-btn-container{
+    margin-top: 20px;
+    display:flex;
+    gap:1vw;
+}
+
+.btn{
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    color: #252525;
+    transition: transform 0.3s ease-out 100ms;
+}
+
+.btn:hover{
+    transform : scale(1.05);
+}
+
+.card-list-container{
+    position: absolute;
+    right: 0px;
+    top: 12vh;
+}
+
+.card-container{
+    width: 18vw;
+    height: 18vh;
+    background-color: #333;
+    margin-top: 14px;
+    border-radius: 5px;
+    transition: transform 0.3s ease-out 100ms;
+}
+
+.card-container:hover{
+    transform : scale(1.05);
+}
+
+.card-btn{
+    position: absolute;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    margin: 10px;
+    border-radius: 1px;
+    background-color:#ffffff;
 }

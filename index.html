@@ -9,16 +9,35 @@
     <title>ec lab</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="typing.css">
+    <link rel="stylesheet" href="cursor.css">
     <script src="https://kit.fontawesome.com/8bc3a4b767.js" crossorigin="anonymous"></script>
-   
+
 </head>
 
 <body>
+
+    <div class="nav-but-wrap">
+
+        <div class="toggler">
+            <label id="switch" class="switch">
+              <input type="checkbox" onchange="toggleTheme()" id="slider">
+              <span class="slider round"></span>
+          </label>
+     </div>
+        
+        <div class="menu-icon hover-target">
+            <span class="menu-icon__line menu-icon__line-left"></span>
+            <span class="menu-icon__line"></span>
+            <span class="menu-icon__line menu-icon__line-right"></span>
+        </div>					
+    </div>	
 
     <div class="decorate">
         <div id="decorate-line-1"></div>
         <div id="decorate-line-2"></div>
     </div>
+
+
 
     <div class="decorate-row">
         <div id="decorate-line-3"></div>
@@ -27,61 +46,83 @@
 
     <div>
         <div class="top-container">
-            <h2>@ECJOJO</h2>
+
+            <h2 class="hover-target">@ECJOJO</h2>
 
             <div>
                 <div id="line-1">
                 </div>
                 <div id="line-2">
                 </div>
-                <a id="github-url">https://ecjojo.github.io/</a>
+                <a id="github-url" class="hover-target">https://ecjojo.github.io/</a>
             </div>
-        </div>
+        </div>v
 
 
-        <a id="barcode">ecjojo.github.io</a>
- 
+        <a id="barcode" class="hover-target">ecjojo.github.io</a>
+
         <div class="main-container">
 
-            <h1>EC LAB</h1>
-            <p>Hello! I'm ecjojo, <span class="typed"></span> </p>
+            <h1 class="hover-target">EC LAB</h1>
+            <p class="hover-target">🫷Hello! I'm ecjojo, <span class="typed" ></span> </p>
 
             <div class="url-btn-container">
-                <a class="btn">Github</a>
-                <a class="btn">Twitter</a>
-                <a class="btn">Linkdle</a>
-                <a class="btn">Discord</a>
-                <a class="btn">Buy me a coffee</a>
-            </div>
-        </div>
 
+                <a class="btn" target="_blank" href="https://ecjojo.github.io/toolbox/">🧰emoji & toolbox</a>
+                
+                <a class="btn" target="_blank" href="https://ecjojo.github.io/LearnEnglishTools/">🃏Learn English Tool</a>
+                <a class="btn" target="_blank" href="https://magic.cat/">🐈‍⬛magic.cat | AI Prompt Book</a>
+            </div>
+            
+            <div class="url-btn-container">
+                <a class="btn" target="_blank" href="https://github.com/ecjojo">🐙Github</a>
+                <a class="btn" target="_blank" href="https://www.linkedin.com/in/ec-j-0095a952/">🔍Linkedin</a>
+                <a class="btn" target="_blank" href="https://twitter.com/ecjojo_ai">✖️Twitter</a>
+                <a class="btn" target="_blank" href="https://www.facebook.com/chauyihei">🆓Facebook</a>
+                <a class="btn" target="_blank" href="https://www.buymeacoffee.com/ecjojo">☕Buy me a coffee</a>
+            </div>
+
+            <a id="get-in-touch" target="_blank" href="https://discord.gg/SUQcwVuXGb">🥂Join my Discord Community ➭</a>
+        </div>
+        🥂
         <div class="card-list-container">
-            My Works
-            <div class="card-container">
+            <h3 class="hover-target">My Works</h3>
+            <a class="card-container" target="_blank" href="https://www.facebook.com/ecjojoai">
                 <div class="card-btn"></div>
-                Patreon ComfyUI Guide
-            </div>
+                <span class="card-title ">🩵AI Girlfriend</span>
+                <img class="card-img" src="Images\card01.png"  style="width: 100%; height: 100%;" />
+            </a>
 
-            <div class="card-container">
+            <a class="card-container" target="_blank" href="https://www.patreon.com/ecjojo">
                 <div class="card-btn"></div>
-                AI Girlfriend Facebook Page
-            </div>
+                <span class="card-title ">👩‍💻ComfyUI Guide</span>
+                <img class="card-img" src="Images\card02.png"  style="width: 100%; height: 100%;" />
+            </a>
 
-            <div class="card-container">
+            <a class="card-container" target="_blank" href="https://github.com/ecjojo/ComfyUI-Templates">
                 <div class="card-btn"></div>
-                ComfyUI Workflow Template
-            </div>
+                <span class="card-title ">👩‍💻ComfyUI Workflow Template</span>
+                <img class="card-img" src="Images\card03.png"  style="width: 100%; height: 100%;" />
+            </a>
 
-            <div class="card-container">
+            <a class="card-container" target="_blank" href="https://github.com/ecjojo/ecjojo-example-nodes">
                 <div class="card-btn"></div>
-                ComfyUI Custom Node Template
-            </div>
+                <span class="card-title ">👩‍💻ComfyUI Custom Node Template</span>
+                <img class="card-img" src="Images\card04.png"  style="width: 100%; height: 100%;" />
+            </a>
 
 
         </div>
+
+        <div class='cursor' id="cursor"></div>
+        <div class='cursor2' id="cursor2"></div>
+        <div class='cursor3' id="cursor3"></div>
 
         <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/typed.js/1.1.1/typed.min.js'></script><script  src="./typing.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/typed.js/1.1.1/typed.min.js'></script>
+        <script src="./typing.js"></script>
+        <script src="./cursor.js"></script>
+        <script src="./theme.js"></script>
 </body>
 
 <footer>

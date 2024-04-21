@@ -6,13 +6,13 @@
 }
 
 .theme-dark{
-    --fill:#1b1b1b;
-    --text:white;
+    --fill:#0D1117;
+    --text:#ececec;
     --primary:#f1e728;
 }
 
 .theme-light{
-    --fill:rgb(251, 251, 251);
+    --fill:#fefefe;
     --text:#3b3b40;
     --primary:#3b3b40;
 }

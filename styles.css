@@ -19,6 +19,7 @@
 
 
 * {
+    overflow: hidden;
     font-family: "Jura", sans-serif;
     margin: 0;
     padding: 0;
@@ -59,14 +60,14 @@ a{
 
 #get-in-touch{
     display:flex;
-    margin-top: 50px;
+    margin-top: 80px;
     font-family: 'NicoMoji-Regular', sans-serif;
-    font-size: 1.3vw;
-    text-decoration:  underline;
+    font-size: 1.5vw;
+    color:var(--primary);
 }
 
 #get-in-touch:hover{
-    transform : scale(1.05);
+    font-size: 1.52vw;
 }
 
 

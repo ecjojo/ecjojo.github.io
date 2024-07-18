@@ -38,12 +38,12 @@ body{
 }
 
 p{
-    font-size: 2.5vw;
+    font-size: 2.4vw;
 }
 
 h1{
-    font-size: 9vw;
-    font-weight: 700;
+    font-size: 6.5vw;
+    font-weight: 800;
     font-family: 'NicoMoji-Regular', sans-serif;
 }
 
@@ -60,17 +60,17 @@ a{
 
 #get-in-touch{
     display:flex;
-    margin-top: 80px;
-    font-family: 'NicoMoji-Regular', sans-serif;
+    margin-top: 20px;
+    font-family:  "Jura", sans-serif;
+    font-weight: 600;
     font-size: 1.5vw;
-    color:var(--primary);
+    color:var(--text);
 }
 
 #get-in-touch:hover{
-    font-size: 1.52vw;
+
+    color:var(--primary);
 }
-
-
 
 .top-container{
     display:flex;
@@ -184,50 +184,52 @@ a{
 }
 
 .btn:hover{
-    transform : scale(1.05);
+    color:var(--primary);
+    border-color: var(--primary);
 }
 
 .card-list-container{
     position: absolute;
-    right: 18px;
     top: 12vh;
+    right: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8vw;
+    align-items: end;
 }
 
 .card-container{
     display:flex;
     width: 17vw;
-    height: 17vh;
+    height: 8.5vw;
     background-color: var(--text);
-    margin-top: 14px;
+    margin-right: 0px;
     border-radius: 1px;
-    padding: 2px;
-    transition: transform 0.1s ease-out 20ms;
+    padding-right: 8px;
+    transition: padding-right background-color 0.25s ease-in-out 30ms;
+
     color:var(--fill);
+
 }
 
 .card-container:hover{
-    transform : scale(1.05);
+    padding-right: 22px;
+    background-color: var(--primary);
+
 }
 
 .card-title {
     position: absolute;
     font-family: "Major Mono Display", monospace;
     color:var(--text);
-    display: inline;
-    margin-top:0.5vh;
-    margin-left: 0.5vw;
     font-size: 2vh;
-    padding-right: 30px;
     line-height :30px;
-
+    font-weight: 800;
+    padding: 0.5vw;
+    width: 10vw;
+    transition: color 0.25s ease-in-out 30ms;
   }
 
-.card-btn{
-    position: absolute;
-    right: 5px;
-    width: 12px;
-    height: 12px;
-    margin: 10px;
-    border-radius: 0.5px;
-    background-color:var(--text);
+.card-title:hover{
+    color: var(--primary);
 }

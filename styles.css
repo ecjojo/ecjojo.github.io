@@ -32,6 +32,7 @@
 }
 
 
+
 body{
     background-color: var(--fill);
     background-image: url("https://www.yudiz.com/codepen/photography-banner/frame.png");
@@ -72,6 +73,7 @@ a{
     color:var(--primary);
 }
 
+
 .top-container{
     display:flex;
     position: absolute;
@@ -87,16 +89,6 @@ a{
     font-size: 11px;
     letter-spacing:6px;
     color:var(--primary);
-}
-
-#wavefont{
-    font-family: "Wavefont", system-ui;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-variation-settings:
-      "ROND" 100,
-      "YELA" -100;
 }
 
 .decorate{
@@ -207,7 +199,6 @@ a{
     border-radius: 1px;
     padding-right: 8px;
     transition: padding-right background-color 0.25s ease-in-out 30ms;
-
     color:var(--fill);
 
 }
@@ -232,4 +223,55 @@ a{
 
 .card-title:hover{
     color: var(--primary);
+}
+
+#tips{
+    font-size: 14px;
+}
+
+@media screen and (max-width:1200px){
+
+    
+    .main-container{
+        padding:0;
+        padding-left: 10vw;
+        padding-right: 5vw;
+    }
+
+    .url-btn-container{
+        display: flex;
+        flex-direction: column;
+        gap:2vh;
+    }
+
+    .btn{
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    #github-url{
+        display: none;
+    }
+
+    h1{
+        display: none;
+    }
+
+    #typing{
+        display: none;
+    }
+
+    .card-list-container{
+        display: none;
+    }
+
+    #get-in-touch{
+        display: none;
+    }
+
+    #barcode{
+        top: 80vh;
+        left: 0px;
+        font-size: 2.5vh;
+    }
 }

@@ -1,6 +1,15 @@
 $(function(){
     $(".typed").typed({
-        strings: ["a Developer.", "a Creator.", "I make ComfyUI Workflow.","I'm building creative project with AIGen."],
+        strings: [
+            "a Developer🐛", 
+            "a Creator🪄", 
+            "a Writer🐚", 
+            
+           "I building projects with AIGen🪅", 
+           "I writing articles to share my thoughts🧠"
+        ],
+
+
         // Optionally use an HTML element to grab strings from (must wrap each string in a <p>)
         stringsElement: null,
         // typing speed

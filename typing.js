@@ -1,12 +1,8 @@
 $(function(){
     $(".typed").typed({
-        strings: [
-            "a Developer🐛", 
-            "a Creator🪄", 
-            "a Writer🐚", 
-            
-           "I building projects with AIGen🪅", 
-           "I writing articles to share my thoughts🧠"
+        strings: [        
+           "I'm building projects with AIGen🪅", 
+           "I'm writing articles to share my thoughts🧠"
         ],
 
 

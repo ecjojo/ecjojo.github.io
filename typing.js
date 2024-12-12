@@ -1,8 +1,8 @@
 $(function(){
     $(".typed").typed({
         strings: [        
-           "I'm building projects with AIGen🪅", 
-           "I'm writing articles to share my thoughts🧠"
+           " supporting my projects.", 
+           "joining my projects.",
         ],
 
 

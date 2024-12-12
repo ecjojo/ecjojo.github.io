@@ -262,6 +262,7 @@ b{
         padding:0;
         padding-left: 10vw;
         padding-right: 5vw;
+        padding-top: 5vh;
         
     }
     .about-me{
@@ -271,12 +272,12 @@ b{
     .url-btn-container{
         display: flex;
         flex-direction: column;
-        gap:2vh;
+        gap:1.5vh;
     }
 
     .btn{
-        font-size: 14px;
-        padding: 10px;
+        font-size: 12px;
+        padding: 8px;
     }
 
     #github-url{

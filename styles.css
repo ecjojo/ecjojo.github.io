@@ -25,9 +25,18 @@ h2 {
 
 .viewport {
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  display: flex;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
+  cursor: grab;
+}
+
+.viewport.dragging {
+  cursor: grabbing;
+  pointer-events: auto;
 }
 
 /* ✨ 加入 perspective 容器 (若你在 HTML 有 .grid-container) */
@@ -42,7 +51,7 @@ h2 {
   justify-content: center;
 }
 
-.content {
+.canvas  {
   position: relative;
   transform: translate(0%, 0%);
   display: flex;
@@ -58,6 +67,7 @@ h2 {
   flex-direction: row;
   gap: 50px;
   margin-bottom: -30px;
+  user-select: none;
 }
 
 /* 🧊 字母卡片樣式 */
@@ -74,15 +84,7 @@ h2 {
   text-shadow: 4px 4px 1px rgba(0, 0, 0, 0.2);
 }
 
-.vertical-text {
-  position: absolute;
-  transform: rotate(-90deg);
-  font-size: 10px;
-  letter-spacing: 4px;
-  font-weight: 100;
-  margin-top: 580px;
-  margin-left: -260px;
-}
+
 
 .content-container {
   position: relative;
@@ -104,15 +106,6 @@ h2 {
   width: 100%;
 }
 
-.blackbox {
-  position: absolute;
-  background: #111;
-  padding: 40px;
-  font-size: 14px;
-  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.1);
-  margin-left: -1020px;
-  margin-top: 280px;
-}
 
 .footer {
   position: relative;
@@ -166,15 +159,14 @@ h2 {
 }
 
 .social-icons a {
-  color: #333;
+    color: #333;
   pointer-events: auto;
 }
 
 .social-icons a:hover {
-
+  transform: translateY(-2px) translateX(-2px);
   transition: all 0.3s ease;
 }
-
 
 .social-icons a[aria-label="Twitter"]:hover {
   color: #1DA1F2;
@@ -182,6 +174,25 @@ h2 {
 
 .social-icons a[aria-label="YouTube"]:hover {
   color: #FF0000;
+}
+
+.social-icons a[aria-label="GitHub"]:hover {
+  color:  #4628a7;
+}
+.social-icons a[aria-label="LinkedIn"]:hover {
+  color: #0077B5;
+}
+.social-icons a[aria-label="Instagram"]:hover {
+  color: #E1306C;
+}
+.social-icons a[aria-label="Facebook"]:hover {
+  color: #1877F2;
+}
+.social-icons a[aria-label="Patreon"]:hover {
+  color: #F96854;
+}
+.social-icons a[aria-label="Twitch"]:hover {
+  color: #9146FF;
 }
 
 .floating-icon {
@@ -265,11 +276,12 @@ h2 {
 /* 外部容器排版：多列 grid */
 .social-links {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 固定3欄 */
+  grid-template-columns: repeat(3, 1fr);
+  /* 固定3欄 */
   gap: 16px;
   pointer-events: auto;
   margin: 10px;
-  font-size:12px;
+  font-size: 12px;
 }
 
 /* 每個預覽項目卡片 */
@@ -280,7 +292,7 @@ h2 {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   font-family: 'JetBrains Mono', monospace;
   transition: transform 0.3s ease;
 }
@@ -315,7 +327,7 @@ h2 {
 /* 滑鼠移入時顯示圖片 */
 .link-preview:hover .preview-img {
   display: block;
-    font-size: 1.3rem;
+  font-size: 1.3rem;
   color: #333;
   flex-shrink: 0;
 }
@@ -329,4 +341,50 @@ h2 {
 
 .dcicon {
   font-size: 1.2rem;
+}
+
+.vertical-text {
+  position: absolute;
+  transform: rotate(-90deg);
+  font-size: 10px;
+  letter-spacing: 4px;
+  font-weight: 100;
+  margin-top: 580px;
+  margin-left: -220px;
+}
+
+.blackbox {
+  position: absolute;
+  background: #111;
+  padding: 40px;
+  font-size: 14px;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.1);
+  left: -160px;
+  top: 360px;
+}
+
+.zoom-controls {
+  position: absolute;
+  top: 280px;
+  left: -220px;
+  background: #000000cc;
+  padding: 8px;
+  border-radius: 8px;
+  z-index: 999;
+  pointer-events: auto;
+
+}
+
+.zoom-controls button {
+  margin: 0 4px;
+  background-color: #ffffff22;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.zoom-controls button:hover {
+  background-color: #ffffff44;
 }

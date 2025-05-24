@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-x..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/styles.css">
-        
+
     <meta name="google-site-verification" content="h0gJbAmCpW8X4IgXpLmx6xnk9GYg153tOhaxF0nwb68" />
 
 </head>
@@ -23,14 +23,7 @@
 
             <div class="grid-background" id="grid"></div>
 
-            <div class="content">
-                <div class="blackbox">
-                    <div class="floating-icon">
-                        <img src="img/bug_1f41b.png" alt="Logo" class="logo">
-                    </div>
-                </div>
-
-
+            <div class="canvas ">
 
 
                 <div class="letter-container">
@@ -47,6 +40,19 @@
                     </div>
 
                     <div id="clock" class="clock-display"></div>
+
+                    <div class="zoom-controls">
+                        <button onclick="zoomOut()">-</button>
+                        <button onclick="zoomIn()">+</button>
+                        <button onclick="resetZoom()">R</button>
+                    </div>
+
+                    <div class="blackbox">
+                        <div class="floating-icon">
+                            <img src="img/bug_1f41b.png" alt="Logo" class="logo">
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="content-container">
@@ -222,6 +228,79 @@
 
         <script src="coloring.js"></script>
         <script src="clock.js"></script>
+<script>
+  let zoomLevel = 1;
+
+  function applyZoom() {
+    document.body.style.zoom = zoomLevel;
+
+    // 💡 若 zoom 無效（Firefox），就 fallback 用 scale
+    if (document.body.style.zoom === "") {
+      document.body.style.transform = `scale(${zoomLevel})`;
+      document.body.style.transformOrigin = 'top left';
+      document.body.style.width = `${100 / zoomLevel}%`;
+      document.body.style.height = `${100 / zoomLevel}%`;
+    } else {
+      document.body.style.transform = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+    }
+  }
+
+  function zoomIn() {
+    zoomLevel = Math.min(2.0, zoomLevel + 0.1); // 上限 2x
+    applyZoom();
+  }
+
+  function zoomOut() {
+    zoomLevel = Math.max(0.5, zoomLevel - 0.1); // 下限 0.5x
+    applyZoom();
+  }
+
+  function resetZoom() {
+    zoomLevel = 1;
+    applyZoom();
+  }
+
+  // 初始套用一次
+  applyZoom();
+</script>
+
+        <script>
+  const viewport = document.querySelector('.viewport');
+  const canvas = document.querySelector('.canvas');
+
+  let isDragging = false;
+  let startX, startY;
+  let currentX = 0, currentY = 0;
+
+  viewport.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX - currentX;
+    startY = e.clientY - currentY;
+    viewport.classList.add('dragging');
+  });
+
+  viewport.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    currentX = e.clientX - startX;
+    currentY = e.clientY - startY;
+    canvas.style.transform = `translate(${currentX}px, ${currentY}px)`;
+  });
+
+  viewport.addEventListener('mouseup', () => {
+    isDragging = false;
+    viewport.classList.remove('dragging');
+  });
+
+  viewport.addEventListener('mouseleave', () => {
+    isDragging = false;
+    viewport.classList.remove('dragging');
+  });
+</script>
+
+
+
 </body>
 
 </html>

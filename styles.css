@@ -11,6 +11,16 @@ body {
   color: #111;
 }
 
+.ecjojo-image {
+  position: absolute;
+ bottom: 20px;  /* 距離底部 20px */
+      right: 20px;    /* 距離左邊 20px */
+  width: 200px;
+  height: 200px;
+  z-index: 100;
+  pointer-events: none; /* 點不到它（可選）*/
+}
+
 h1 {
   font-size: 30px;
   color: #333;

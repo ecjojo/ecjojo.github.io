@@ -15,8 +15,8 @@ body {
   position: absolute;
  bottom: 20px;  /* 距離底部 20px */
       right: 20px;    /* 距離左邊 20px */
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
   z-index: 100;
   pointer-events: none; /* 點不到它（可選）*/
 }
@@ -90,7 +90,7 @@ h2 {
 }
 
 .letter:hover {
-  transform: translateX(-2px) translateY(-2px);
+  transform: translateX(-6px) translateY(-6px);
   text-shadow: 4px 4px 1px rgba(0, 0, 0, 0.2);
 }
 
@@ -140,7 +140,7 @@ h2 {
 }
 
 .discord-button {
-  background-color: #5865F2;
+  background-color: #816abb;
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
@@ -157,9 +157,9 @@ h2 {
 }
 
 .discord-button:hover {
-  background-color: #4752C4;
+  background-color: #7347c4;
   transition: background-color 0.3s ease;
-  transform: translateY(-1px) translateX(-1px);
+  transform: translateY(-6px) translateX(-6px);
 }
 
 .social-icons {
@@ -308,7 +308,7 @@ h2 {
 }
 
 .link-preview:hover {
-  transform: translateY(-2px) translateX(-2px);
+  transform: translateY(-6px) translateX(-6px);
   z-index: 2;
 }
 

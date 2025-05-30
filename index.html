@@ -85,8 +85,8 @@
                             <span class="skill-tag">#ChaoticGood</span>
                             <span class="skill-tag">#ENTP</span>
                             <span class="skill-tag">#170cm</span>
-                            <span class="skill-tag">#SimulationGameLover</span>
                             <span class="skill-tag">#IndoorNative</span>
+                            <span class="skill-tag">#SimulationGameLover</span>
 
 
                         </div>
@@ -98,6 +98,15 @@
                 <div class="content-container">
                     <div class="content-box">
                         <div class="social-links">
+
+
+                            <div class="link-preview">
+                                <i class="fab fa-patreon icon"></i>
+                                <a href="https://patreon.com/ecjojo" target="_blank">Patreon | ComfyUI 教學</a>
+                                <img src="/img/preview-patreon.png" class="preview-img" alt="Patreon 預覽圖">
+                            </div>
+
+
                             <div class="link-preview">
                                 <i class="fas fa-toolbox icon"></i>
                                 <a href="https://ecjojo.github.io/toolbox/" target="_blank">Toolbox - emoji & symbol
@@ -105,11 +114,6 @@
                                 <img src="/img/preview-toolbox.png" class="preview-img" alt="Toolbox 預覽圖">
                             </div>
 
-                            <div class="link-preview">
-                                <i class="fab fa-patreon icon"></i>
-                                <a href="https://patreon.com/ecjojo" target="_blank">Patreon | ComfyUI 教學</a>
-                                <img src="/img/preview-patreon.png" class="preview-img" alt="Patreon 預覽圖">
-                            </div>
 
                             <div class="link-preview">
                                 <i class="fas fa-book icon"></i>
@@ -126,7 +130,7 @@
                             </div>
 
                             <div class="link-preview">
-                                <i class="fas fa-brain icon"></i>
+                                <i class="fas fa-cogs icon"></i>
                                 <a href="https://openart.ai/workflows/profile/ecjojo" target="_blank">openart.ai |
                                     ComfyUI
                                     Workflow</a>
@@ -149,11 +153,7 @@
                                 <img src="/img/preview-nodes.png" class="preview-img" alt="Github Nodes 預覽圖">
                             </div>
 
-                            <div class="link-preview">
-                                <i class="fab fa-facebook icon"></i>
-                                <a href="https://www.facebook.com/ecjojoai" target="_blank">Facebook專頁 | AI女友</a>
-                                <img src="/img/preview-facebook.png" class="preview-img" alt="Facebook 預覽圖">
-                            </div>
+
 
                         </div>
 
@@ -230,76 +230,76 @@
 
         <script src="coloring.js"></script>
         <script src="clock.js"></script>
-<script>
-  let zoomLevel = 1;
+        <script>
+            let zoomLevel = 1;
 
-  function applyZoom() {
-    document.body.style.zoom = zoomLevel;
+            function applyZoom() {
+                document.body.style.zoom = zoomLevel;
 
-    // 💡 若 zoom 無效（Firefox），就 fallback 用 scale
-    if (document.body.style.zoom === "") {
-      document.body.style.transform = `scale(${zoomLevel})`;
-      document.body.style.transformOrigin = 'top left';
-      document.body.style.width = `${100 / zoomLevel}%`;
-      document.body.style.height = `${100 / zoomLevel}%`;
-    } else {
-      document.body.style.transform = "";
-      document.body.style.width = "";
-      document.body.style.height = "";
-    }
-  }
+                // 💡 若 zoom 無效（Firefox），就 fallback 用 scale
+                if (document.body.style.zoom === "") {
+                    document.body.style.transform = `scale(${zoomLevel})`;
+                    document.body.style.transformOrigin = 'top left';
+                    document.body.style.width = `${100 / zoomLevel}%`;
+                    document.body.style.height = `${100 / zoomLevel}%`;
+                } else {
+                    document.body.style.transform = "";
+                    document.body.style.width = "";
+                    document.body.style.height = "";
+                }
+            }
 
-  function zoomIn() {
-    zoomLevel = Math.min(2.0, zoomLevel + 0.1); // 上限 2x
-    applyZoom();
-  }
+            function zoomIn() {
+                zoomLevel = Math.min(2.0, zoomLevel + 0.1); // 上限 2x
+                applyZoom();
+            }
 
-  function zoomOut() {
-    zoomLevel = Math.max(0.5, zoomLevel - 0.1); // 下限 0.5x
-    applyZoom();
-  }
+            function zoomOut() {
+                zoomLevel = Math.max(0.5, zoomLevel - 0.1); // 下限 0.5x
+                applyZoom();
+            }
 
-  function resetZoom() {
-    zoomLevel = 1;
-    applyZoom();
-  }
+            function resetZoom() {
+                zoomLevel = 1;
+                applyZoom();
+            }
 
-  // 初始套用一次
-  applyZoom();
-</script>
+            // 初始套用一次
+            applyZoom();
+        </script>
 
         <script>
-  const viewport = document.querySelector('.viewport');
-  const canvas = document.querySelector('.canvas');
+            const viewport = document.querySelector('.viewport');
+            const canvas = document.querySelector('.canvas');
 
-  let isDragging = false;
-  let startX, startY;
-  let currentX = 0, currentY = 0;
+            let isDragging = false;
+            let startX, startY;
+            let currentX = 0, currentY = 0;
 
-  viewport.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.clientX - currentX;
-    startY = e.clientY - currentY;
-    viewport.classList.add('dragging');
-  });
+            viewport.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - currentX;
+                startY = e.clientY - currentY;
+                viewport.classList.add('dragging');
+            });
 
-  viewport.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    currentX = e.clientX - startX;
-    currentY = e.clientY - startY;
-    canvas.style.transform = `translate(${currentX}px, ${currentY}px)`;
-  });
+            viewport.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                currentX = e.clientX - startX;
+                currentY = e.clientY - startY;
+                canvas.style.transform = `translate(${currentX}px, ${currentY}px)`;
+            });
 
-  viewport.addEventListener('mouseup', () => {
-    isDragging = false;
-    viewport.classList.remove('dragging');
-  });
+            viewport.addEventListener('mouseup', () => {
+                isDragging = false;
+                viewport.classList.remove('dragging');
+            });
 
-  viewport.addEventListener('mouseleave', () => {
-    isDragging = false;
-    viewport.classList.remove('dragging');
-  });
-</script>
+            viewport.addEventListener('mouseleave', () => {
+                isDragging = false;
+                viewport.classList.remove('dragging');
+            });
+        </script>
 
 
 

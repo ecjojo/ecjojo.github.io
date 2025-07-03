@@ -11,14 +11,19 @@ body {
   color: #111;
 }
 
+
+
 .ecjojo-image {
   position: absolute;
- bottom: 20px;  /* 距離底部 20px */
-      right: 20px;    /* 距離左邊 20px */
+  bottom: 20px;
+  /* 距離底部 20px */
+  right: 20px;
+  /* 距離左邊 20px */
   width: 300px;
   height: 300px;
   z-index: 100;
-  pointer-events: none; /* 點不到它（可選）*/
+  pointer-events: none;
+  /* 點不到它（可選）*/
 }
 
 h1 {
@@ -61,7 +66,7 @@ h2 {
   justify-content: center;
 }
 
-.canvas  {
+.canvas {
   position: relative;
   transform: translate(0%, 0%);
   display: flex;
@@ -140,7 +145,7 @@ h2 {
 }
 
 .discord-button {
-  background-color: #816abb;
+  background-color: #323133;
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
@@ -157,9 +162,16 @@ h2 {
 }
 
 .discord-button:hover {
-  background-color: #7347c4;
+  background-color: #29282b;
   transition: background-color 0.3s ease;
   transform: translateY(-6px) translateX(-6px);
+}
+
+a {
+  pointer-events: auto;
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(214, 52, 232);
 }
 
 .social-icons {
@@ -169,7 +181,7 @@ h2 {
 }
 
 .social-icons a {
-    color: #333;
+  color: #333;
   pointer-events: auto;
 }
 
@@ -187,20 +199,25 @@ h2 {
 }
 
 .social-icons a[aria-label="GitHub"]:hover {
-  color:  #4628a7;
+  color: #4628a7;
 }
+
 .social-icons a[aria-label="LinkedIn"]:hover {
   color: #0077B5;
 }
+
 .social-icons a[aria-label="Instagram"]:hover {
   color: #E1306C;
 }
+
 .social-icons a[aria-label="Facebook"]:hover {
   color: #1877F2;
 }
+
 .social-icons a[aria-label="Patreon"]:hover {
   color: #F96854;
 }
+
 .social-icons a[aria-label="Twitch"]:hover {
   color: #9146FF;
 }

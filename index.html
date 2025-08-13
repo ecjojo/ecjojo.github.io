@@ -8,322 +8,97 @@
     <meta name="ecjojo" content="ecjojo studio">
     <meta property="og:type" content="website">
     <title>ecjojo | About Me</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        integrity="sha512-x..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 
     <meta name="google-site-verification" content="h0gJbAmCpW8X4IgXpLmx6xnk9GYg153tOhaxF0nwb68" />
 
 </head>
 
 <body>
-    <div class="viewport">
-
-        <img src="/img/char.png" alt="ecjojo" class="ecjojo-image">
-
-        <div class="grid-container">
-
-            <div class="grid-background" id="grid"></div>
-
-            <div class="canvas ">
 
 
-                <div class="letter-container">
-
-                    <div class="letter">E</div>
-                    <div class="letter">C</div>
-                    <div class="letter">J</div>
-                    <div class="letter">O</div>
-                    <div class="letter">J</div>
-                    <div class="letter">O</div>
-
-                    <div class="vertical-text">
-                        https://ecjojo.github.io/
-                    </div>
-
-                    <div id="clock" class="clock-display"></div>
-
-                    <div class="zoom-controls">
-                        <button onclick="zoomOut()">-</button>
-                        <button onclick="zoomIn()">+</button>
-                        <button onclick="resetZoom()">R</button>
-                    </div>
-
-                    <div class="blackbox">
-                        <div class="floating-icon">
-                            <img src="img/bug_1f41b.png" alt="Logo" class="logo">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="content-container">
-                    <h2>Indie Game & Content Creator @Mindweaver_Games | AI Consultant & ComfyUI
-                        @Funtown, @ComfyDeploy
-                    </h2>
-                </div>
-
-                <div class="content-container">
-
-                    <div class="content-box">
-                        <div>
-                            <h1> Welcome!</h1>
-                            <p>🖖I'm ecjojo.
-                                <a class="clickAB" href="https://x.com/ecjojoDEV" target="_blank">Click to connect on
-                                    X.</a>
+    <div class="canvas" id="canvas">
 
 
-                        </div>
-                    </div>
-
-                    <div class="content-box">
-                        <div class="skill-tags">
-
-                            <span class="skill-tag">#Human</span>
-                            <span class="skill-tag">#BornFromHongKong</span>
-                            <span class="skill-tag">#LivingInTaiwan</span>
-                            <span class="skill-tag">#ComfyUI</span>
-                            <span class="skill-tag">#GameDev</span>
-                            <span class="skill-tag">#Unity</span>
-                            <span class="skill-tag">#3DModeling</span>
-                            <span class="skill-tag">#Blender</span>
-                            <span class="skill-tag">#MagicalVoxel</span>
-                            <span class="skill-tag">#Live2D</span>
-                            <span class="skill-tag">#Figma</span>
-                            <span class="skill-tag">#GenAI</span>
-
-                            <span class="skill-tag">#ChaoticGood</span>
-                            <span class="skill-tag">#INTP</span>
-
-                            <span class="skill-tag">#Coffee</span>
-
-
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="content-container">
-                    <div class="content-box">
-                        <div class="social-links">
-                            <div class="">
-                                <h1>PROJECT LIST_ </h1>
-                            </div>
-
-
-                            <div class="link-preview">
-                                <i class="fab fa-patreon icon"></i>
-                                <a href="https://patreon.com/ecjojo" target="_blank">Patreon | ComfyUI 教學</a>
-                                <img src="/img/preview-patreon.png" class="preview-img" alt="Patreon 預覽圖">
-                            </div>
-                            <div class="link-preview">
-                                <i class="fab fa-patreon icon"></i>
-                                <a href="https://patreon.com/ecjojoDEV" target="_blank">Patreon | Unity Game Dev</a>
-                                <img src="/img/preview-patreon.png" class="preview-img" alt="Patreon 預覽圖">
-                            </div>
-
-
-
-
-                            <div class="link-preview">
-                                <i class="fas fa-toolbox icon"></i>
-                                <a href="https://ecjojo.github.io/toolbox/" target="_blank">Toolbox - emoji & symbol
-                                    copy book</a>
-                                <img src="/img/preview-toolbox.png" class="preview-img" alt="Toolbox 預覽圖">
-                            </div>
-
-
-                            <div class="link-preview">
-                                <i class="fas fa-book icon"></i>
-                                <a href="https://magic-cat.vercel.app/" target="_blank">Magic Cat - AI Prompt
-                                    Book</a>
-                                <img src="/img/preview-magiccat.png" class="preview-img" alt="Magic Cat 預覽圖">
-                            </div>
-
-                            <div class="link-preview">
-                                <i class="fab fa-github icon"></i>
-                                <a href="https://github.com/ecjojo/Ecjojo-ComfyUI-Workflows" target="_blank">Github
-                                    | ComfyUI
-                                    Workflow Template</a>
-                                <img src="/img/preview-workflow.png" class="preview-img" alt="Github Workflow 預覽圖">
-                            </div>
-
-                            <div class="link-preview">
-                                <i class="fab fa-github icon"></i>
-                                <a href="https://github.com/ecjojo/ecjojo-example-nodes" target="_blank">Github |
-                                    Custom
-                                    Nodes Template</a>
-                                <img src="/img/preview-nodes.png" class="preview-img" alt="Github Nodes 預覽圖">
-                            </div>
-
-                            <div class="link-preview">
-                                <i class="fas fa-cogs icon"></i>
-                                <a href="https://civitai.com/user/ecjojo/articles" target="_blank">CivitAI | ComfyUI
-                                    Workflow</a>
-                                <img src="/img/preview-civitai.png" class="preview-img" alt="CivitAI 預覽圖">
-                            </div>
-
-                            <div class="link-preview">
-                                <i class="fas fa-cogs icon"></i>
-                                <a href="https://openart.ai/workflows/profile/ecjojo" target="_blank">openart.ai |
-                                    ComfyUI
-                                    Workflow</a>
-                                <img src="/img/preview-openart.png" class="preview-img" alt="OpenArt 預覽圖">
-                            </div>
-
-
-
-
-
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="content-container">
-                    <div class="content-box">
-                        <div>
-                            <div class="partner-logos">
-                                <img src="/img/mightybear2.png" alt="Mighty Bear Games">
-                                <img src="/img/naver.png" alt="Naver">
-                                <img src="/img/comfydeploy.jfif" alt="ComfyDeploy">
-                                <img src="/img/funtown.jpg" alt="FunTown">
-                                <img src="/img/zuni.png" alt="Zuni Icosahedron">
-                                <img src="/img/yue.ico" alt="Abound Yue 0X18F">
-                                <img src="/img/images.jfif" alt="Abound Yue 0X18F">
-                                <img src="/img/playground.jpg" alt="Playground for VTuber">
-                                <img src="/img/avatech.jfif" alt="Avatech">
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <div style="width: 320px;">
-
-                        <div>
-                            <div class="discord-button">
-                                <a href="https://discord.gg/8Zzf2BSJXd" target="_blank" aria-label="Discord">
-                                    <i class="fab fa-discord dcicon"></i> ComfyUI
-                                </a>
-                            </div>
-
-
-                            <div class="discord-button">
-                                <a href="https://discord.gg/8Zzf2BSJXd" target="_blank" aria-label="Discord">
-                                    <i class="fab fa-discord dcicon"></i> GameDev
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-                <footer class="footer">
-                    <div class="footer-inner">
-                        <div class="social-icons">
-                            <a href="https://github.com/ecjojo" target="_blank" aria-label="GitHub">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="https://twitter.com/ecjojoDEV" target="_blank" aria-label="Twitter">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="https://www.instagram.com/ecjojo/" target="_blank" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="https://www.twitch.tv/ecjojo" target="_blank" aria-label="Twitch">
-                                <i class="fab fa-twitch"></i>
-                            </a>
-                            <a href="https://www.youtube.com/@ecjojoDEV" target="_blank" aria-label="YouTube">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-
-                        </div>
-                        <p>&copy;2025 ecjojo. All rights reserved. </p>
-                    </div>
-                </footer>
-
+        <div class="infobar">
+            ★ ECJOJO ★ | <div class="date" id="date"></div> |
+            <div id="clock" class="clock-display">
             </div>
 
         </div>
 
-        <script src="coloring.js"></script>
-        <script src="clock.js"></script>
-        <script>
-            let zoomLevel = 1;
+        <nav class="sidebar">
+            <ul>
 
-            function applyZoom() {
-                document.body.style.zoom = zoomLevel;
 
-                // 💡 若 zoom 無效（Firefox），就 fallback 用 scale
-                if (document.body.style.zoom === "") {
-                    document.body.style.transform = `scale(${zoomLevel})`;
-                    document.body.style.transformOrigin = 'top left';
-                    document.body.style.width = `${100 / zoomLevel}%`;
-                    document.body.style.height = `${100 / zoomLevel}%`;
-                } else {
-                    document.body.style.transform = "";
-                    document.body.style.width = "";
-                    document.body.style.height = "";
-                }
-            }
+                <li><a href="https://www.patreon.com/ecjojoDEV" target="_blank"><span
+                            class="material-symbols-outlined">castle</span></a></li>
+                <div>
+                    <hr />
+                </div>
+                <span style="padding-top:0.8rem ;">APP</span>
+                <li><a href="https://ecjojo.github.io/toolbox/" target="_blank">
+                        <span class="material-symbols-outlined">emoji_language</span></a></li>
+                <li><a href="https://magic-cat.vercel.app/" target="_blank"><span
+                            class="material-symbols-outlined">style</span></a></li>
+                <li><a href="https://www.patreon.com/ecjojo" target="_blank"><span
+                            class="material-symbols-outlined">crossword</span></a></li>
+                <div>
+                    <hr />
+                </div>
 
-            function zoomIn() {
-                zoomLevel = Math.min(2.0, zoomLevel + 0.1); // 上限 2x
-                applyZoom();
-            }
+                <span style="padding-top:0.8rem ;">BLOG</span>
+                <li><a href="https://ecjojo.blogspot.com/" target="_blank"><span
+                            class="material-symbols-outlined">person_book</span></a></li>
+                <li><a href="https://www.youtube.com/@ecjojoDEV" target="_blank"><span
+                            class="material-symbols-outlined">play_circle</span></a></li>
+                <div>
+                    <hr />
+                </div>
+                <span style="padding-top:0.8rem ;">JOIN</span>
+                <li>
+                    <a href="https://discord.gg/mFMVpbbYbt 
+" target="_blank" rel="noopener" aria-label="Discord">
+                        <i class="fa-brands fa-discord"></i></a>
+                </li>
+            </ul>
+        </nav>
 
-            function zoomOut() {
-                zoomLevel = Math.max(0.5, zoomLevel - 0.1); // 下限 0.5x
-                applyZoom();
-            }
 
-            function resetZoom() {
-                zoomLevel = 1;
-                applyZoom();
-            }
+        <a class="bubble" href="https://x.com/ecjojoDEV" target="_blank" style=" background-image: url('img/img0.png');  width: 14rem;height: 14rem;
+            ">
+            <div class="bubble_typebox" id="typebox">
+                <span id="cta-text"></span>
+            </div>
+        </a>
 
-            // 初始套用一次
-            applyZoom();
-        </script>
+        <a class="bubble" href="https://www.patreon.com/ecjojo" target="_blank"
+            style=" background-image: url('img/img_comfyui.png'); width: 10rem;height: 10rem;">
 
-        <script>
-            const viewport = document.querySelector('.viewport');
-            const canvas = document.querySelector('.canvas');
+        </a>
 
-            let isDragging = false;
-            let startX, startY;
-            let currentX = 0, currentY = 0;
+        <a class="bubble" href="https://www.patreon.com/ecjojoDEV" target="_blank"
+            style=" background-image: url('img/img_gamedev.png'); width: 13rem;height: 13rem;">
 
-            viewport.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                startX = e.clientX - currentX;
-                startY = e.clientY - currentY;
-                viewport.classList.add('dragging');
-            });
+        </a>
 
-            viewport.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                currentX = e.clientX - startX;
-                currentY = e.clientY - startY;
-                canvas.style.transform = `translate(${currentX}px, ${currentY}px)`;
-            });
+        <div class="bubble evade"   style="width: 5rem;height: 5rem;">
 
-            viewport.addEventListener('mouseup', () => {
-                isDragging = false;
-                viewport.classList.remove('dragging');
-            });
-
-            viewport.addEventListener('mouseleave', () => {
-                isDragging = false;
-                viewport.classList.remove('dragging');
-            });
-        </script>
+        </div>
 
 
 
+    </div>
+
+    </div>
+    <script src="js/scale.js"></script>
+    <script src="js/clock.js"></script>
+    <script src="js/typing.js"></script>
+    <script src="js/drag.js"></script>
+    <script src="js/date.js"></script>
 </body>
 
 </html>

@@ -1,417 +1,188 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
 
+* {
+  font-family: "Syne Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+
+  color: #fff;
+}
 
 body {
   margin: 0;
-  background: linear-gradient(145deg, #ffffff, #dde5e5);
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 10px;
-  color: #111;
-}
-
-
-
-.ecjojo-image {
-  position: absolute;
-  bottom: 20px;
-  /* 距離底部 20px */
-  right: 20px;
-  /* 距離左邊 20px */
-  width: 300px;
-  height: 300px;
-  z-index: 100;
+  background-color: #1f1f1f;
+  /* 深灰底色 */
+  background-image:
+    linear-gradient(#141414 2px, transparent 1px),
+    linear-gradient(90deg, #141414 2px, transparent 1px),
+    linear-gradient(#141414 1px, transparent 1px),
+    linear-gradient(90deg, #141414 1px, transparent 1px);
+  background-size: 144px 144px, 144px 144px, 16px 16px, 16px 16px;
+  transition: background-size 0.2s ease;
+  background-position: center center;
+  /* 從中間縮放 */
   pointer-events: none;
-  /* 點不到它（可選）*/
 }
 
-h1 {
-  font-size: 30px;
-  color: #333;
-  font-family: 'Anton', sans-serif;
-  font-weight: 400;
-  margin: 0;
-}
-
-h2 {
-  font-size: 13px;
-}
-
-.viewport {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+.about {
   display: flex;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  cursor: grab;
+  flex-direction: column;
+  align-items: center;
+  line-height: 2rem;
 }
 
-.viewport.dragging {
-  cursor: grabbing;
-  pointer-events: auto;
-}
-
-/* ✨ 加入 perspective 容器 (若你在 HTML 有 .grid-container) */
-.grid-container {
+.infobar {
   position: absolute;
-  width: 100%;
+  left: 4.2rem;
+  display: flex;
+  font-size: 1rem;
+  padding: 1rem;
+  align-items: center;
+}
+
+.sidebar {
+  position: absolute;
+  width: 4rem;
   height: 100%;
-  transform: skewX(-48deg) skewY(13deg) scaleY(0.75) scaleX(1.5);
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1.5px);
-  background-size: 40px 40px;
-  justify-content: center;
+  background-color: #303030;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin: 20px 0;
+}
+
+.sidebar a {
+  display: flex;
+  flex-direction: column;
+  /* 垂直排列 */
+  align-items: center;
+
+  text-decoration: none;
+}
+
+.sidebar i,
+.sidebar svg {
+  color: #aaa;
+  fill: #aaa;
+  font-size: 22px;
+}
+
+.sidebar span {
+  display: flex;
+  flex-direction: column;
+  /* 垂直排列 */
+  align-items: center;
+  /* 水平置中 */
+}
+
+.sidebar .material-symbols-outlined {
+  font-size: 28px;
+  color: #aaa;
+  transition: color 0.2s;
+}
+
+.sidebar a:hover .material-symbols-outlined {
+  color: #fff;
+}
+
+.date,
+.clock-display {
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+}
+
+.zoom-btn {
+  font-size: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: #faf3e0;
+  background-color: #353535;
+  color: #faf3e0;
 }
 
 .canvas {
-  position: relative;
-  transform: translate(0%, 0%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.letter-container {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-  margin-bottom: -30px;
-  user-select: none;
-}
-
-/* 🧊 字母卡片樣式 */
-.letter {
-  font-family: 'Anton', sans-serif;
-  font-size: 200px;
-  color: #111;
-  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
-  pointer-events: auto;
-}
-
-.letter:hover {
-  transform: translateX(-6px) translateY(-6px);
-  text-shadow: 4px 4px 1px rgba(0, 0, 0, 0.2);
-}
-
-
-
-.content-container {
-  position: relative;
-  margin-top: 20px;
-  width: 800px;
-  display: flex;
-  font-size: 14px;
-  gap: 20px;
-
-}
-
-.content-box {
-  display: flex;
-  background: linear-gradient(145deg, #ffffff5f, #ffffff3c);
-  backdrop-filter: blur(5px);
-  padding: 20px;
-  border: #111 1px solid;
-  box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-}
-
-
-.footer {
-  position: relative;
-  font-family: 'JetBrains Mono', monospace;
-  margin-top: 40px;
-  width: 720px;
-  z-index: 10;
-  background: linear-gradient(145deg, #ffffff5f, #ffffff3c);
-  backdrop-filter: blur(5px);
-  padding: 20px 40px 20px 40px;
-  border: #111 1px solid;
-  color: #111;
-  box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-
-.footer .footer-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.discord-button {
-  background-color: #323133;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  pointer-events: auto;
-  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.2);
-  margin: 8px;
-}
-
-.discord-button a[aria-label="Discord"] {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.discord-button:hover {
-  background-color: #29282b;
-  transition: background-color 0.3s ease;
-  transform: translateY(-6px) translateX(-6px);
-}
-
-a {
-  pointer-events: auto;
-  text-decoration: none;
-  font-weight: bold;
-  color: rgb(214, 52, 232);
-}
-
-.social-icons {
-  display: flex;
-  gap: 1rem;
-  font-size: 1.4rem;
-}
-
-.social-icons a {
-  color: #333;
-  pointer-events: auto;
-}
-
-.social-icons a:hover {
-  transform: translateY(-2px) translateX(-2px);
-  transition: all 0.3s ease;
-}
-
-.social-icons a[aria-label="Twitter"]:hover {
-  color: #1DA1F2;
-}
-
-.social-icons a[aria-label="YouTube"]:hover {
-  color: #FF0000;
-}
-
-.social-icons a[aria-label="GitHub"]:hover {
-  color: #4628a7;
-}
-
-.social-icons a[aria-label="LinkedIn"]:hover {
-  color: #0077B5;
-}
-
-.social-icons a[aria-label="Instagram"]:hover {
-  color: #E1306C;
-}
-
-.social-icons a[aria-label="Facebook"]:hover {
-  color: #1877F2;
-}
-
-.social-icons a[aria-label="Patreon"]:hover {
-  color: #F96854;
-}
-
-.social-icons a[aria-label="Twitch"]:hover {
-  color: #9146FF;
-}
-
-.floating-icon {
   position: absolute;
-  animation: floatLoop 4.7s ease-in-out infinite;
-  will-change: transform;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+  pointer-events: auto;
+  /* 泡泡可以點 */
 }
 
-@keyframes floatLoop {
+.bubble {
+  position: absolute;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 50%;
+  /* 你的泡泡背景 */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.25s ease;
+
+}
+
+@keyframes bubblePulse {
   0% {
-    transform: skewX(45deg) skewY(-40deg) rotateX(45deg) scale(0.5) translateY(-180%) translateX(-5%) rotateZ(-4deg);
+    transform: scale(1);
   }
 
   50% {
-    transform: skewX(45deg) skewY(-30deg) rotateX(40deg) scale(0.5) translateY(-190%) translateX(-10%) rotateZ(2deg);
+    transform: scale(1.03);
   }
 
   100% {
-    transform: skewX(45deg) skewY(-40deg) rotateX(45deg) scale(0.5) translateY(-180%) translateX(-5%) rotateZ(-4deg);
+    transform: scale(1);
   }
 }
 
-.grid-background {
-  position: fixed;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0px;
-  z-index: 0;
+.bubble:hover {
+  animation: bubblePulse 1s ease-in-out infinite;
+
+}
+
+
+.bubble_typebox {
+  font-size: 1.5rem;
+  line-height: 4rem;
+  position: absolute;
+  text-align: center;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8),
+    -2px -2px 0 rgba(0, 0, 0, 0.8),
+    2px -2px 0 rgba(0, 0, 0, 0.8),
+    -2px 2px 0 rgba(0, 0, 0, 0.8);
+  opacity: 0;
   pointer-events: none;
-}
-
-
-.block {
-  width: 40px;
-  height: 40px;
-  background-color: transparent;
-  transition: background-color 0.7s;
-  pointer-events: auto;
-}
-
-.partner-logos img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  margin: 4px;
-  pointer-events: auto;
-  border-radius: 100px;
-  transition: all 0.3s ease;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-.partner-logos img:hover {
-  transform: rotateZ(90deg);
-}
-
-.clock-display {
-  position: absolute;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 32px;
-  color: #444;
-  opacity: 0.7;
-  top: 190px;
-  left: -240px;
-  background: #ffffff88;
-  padding: 4px 10px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 99;
-}
-
-.skill-tag {
-  display: inline-block;
-  background: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 2px;
-  font-size: 11px;
-  color: #333;
-  margin: 2px;
-}
-
-/* 外部容器排版：多列 grid */
-.social-links {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  /* 固定3欄 */
-  gap: 16px;
-  pointer-events: auto;
-  margin: 10px;
-  font-size: 12px;
-}
-
-/* 每個預覽項目卡片 */
-.link-preview {
-  background: #f5f5f5;
-  border-radius: 12px;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  font-family: 'JetBrains Mono', monospace;
-  transition: transform 0.3s ease;
-}
-
-.link-preview:hover {
-  transform: translateY(-6px) translateX(-6px);
+  transition: opacity 0.15s ease;
   z-index: 2;
+  /* 讓文字在最上層 */
 }
 
-/* 連結樣式 */
-.link-preview a {
-  color: #111;
-  font-weight: 600;
-  font-family: 'JetBrains Mono', monospace;
-  text-decoration: none;
+/* hover 才顯示 */
+.bubble:hover .bubble_typebox {
+  opacity: 1;
 }
 
-/* 預覽圖片：初始隱藏 */
-.preview-img {
-  display: none;
-  position: absolute;
-  transform: skewX(45deg) rotateX(45deg) translateX(20%) translateY(-100%);
-  width: 200px;
-  height: auto;
-  margin-top: 0.5rem;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  z-index: 99;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-/* 滑鼠移入時顯示圖片 */
-.link-preview:hover .preview-img {
-  display: block;
-  font-size: 1.3rem;
-  color: #333;
-  flex-shrink: 0;
-}
-
-/* 圖示美化 */
-.icon {
-  font-size: 1.4rem;
-  margin-right: 0.5rem;
-  color: #444;
-}
-
-.dcicon {
-  font-size: 1.2rem;
-}
-
-.vertical-text {
-  position: absolute;
-  transform: rotate(-90deg);
-  font-size: 10px;
-  letter-spacing: 4px;
-  font-weight: 100;
-  margin-top: 580px;
-  margin-left: -220px;
-}
-
-.blackbox {
-  position: absolute;
-  background: #111;
-  padding: 40px;
-  font-size: 14px;
-  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.1);
-  left: -160px;
-  top: 360px;
-}
-
-.zoom-controls {
-  position: absolute;
-  top: 280px;
-  left: -220px;
-  background: #000000cc;
-  padding: 8px;
-  border-radius: 8px;
-  z-index: 999;
-  pointer-events: auto;
-
-}
-
-.zoom-controls button {
-  margin: 0 4px;
-  background-color: #ffffff22;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.zoom-controls button:hover {
-  background-color: #ffffff44;
+.bubble.evade {
+  background: radial-gradient(120px 100px at 30% 30%, rgba(255, 255, 255, .16), rgba(255, 255, 255, .06));
+  border-color: rgba(148, 163, 255, .35);
+  box-shadow: 0 8px 26px rgba(95, 119, 255, .25), inset 0 1px 16px rgba(169, 181, 255, .18);
+  cursor: default;
 }

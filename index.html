@@ -12,8 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-
-
     <meta name="google-site-verification" content="h0gJbAmCpW8X4IgXpLmx6xnk9GYg153tOhaxF0nwb68" />
 
 </head>
@@ -21,16 +19,23 @@
 <body>
     <div id="clock">
     </div>
+
     <div class="main">
+        <svg class="line" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
 
-
-
-        <h1>ECJOJO STUDIO
+            <path d="M 20 100 A 130 130 0 0 0 280 100" stroke="white" stroke-width="0.1" fill="none" />
+        </svg>
+        <h1>
+            ECJOJO STUDIO
         </h1>
+
+        <h2>
+            Game Designer | Generative AI Expert (ComfyUI)
+        </h2>
         <div class="navbar">
             <a href="https://patreon.com/ecjojoDEV" target="_blank" class="tooltip">
                 <i class="fas fa-ghost"></i>
-                <span class="tooltip-text">Sub to get my montly Game Projects!</span>
+                <span class="tooltip-text">Montly Game Project</span>
             </a>
             <a href="https://patreon.com/ecjojo" target="_blank" class="tooltip">
                 <i class="fab fa-patreon"></i>
@@ -71,11 +76,44 @@
         </div>
 
 
+
+        <div>
+            <div class="time1">
+                <div class="point">
+                    2024
+                </div>
+
+
+            </div>
+            <div class="time2">
+                <div class="point">
+
+                    2025
+                </div>
+            </div>
+            <div class="time3">
+                <div class="point">
+
+                    2026
+                </div>
+            </div>
+        </div>
+
+
+
+
     </div>
 
-    <script src="js/clock.js">
+    <div class="canvas" id="canvas">
+        <a class="bubble" href="https://www.patreon.com/ecjojo" target="_blank"
+            style=" background-image: url('img/img_comfyui.png');">
+        </a>
+          <a class="bubble" href="https://www.patreon.com/ecjojoDEV" target="_blank"
+            style=" background-image: url('img/img_gamedev.png'); width: 10rem;height: 10rem;"></a>
+    </div>
 
-    </script>
+    <script src="js/clock.js"> </script>
+    <script src="js/drag.js"> </script>
 </body>
 
 </html>

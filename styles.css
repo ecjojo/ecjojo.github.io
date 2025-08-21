@@ -2,7 +2,6 @@
 
 * {
   color: azure;
-
   font-family: "Syne Mono", monospace;
 }
 
@@ -15,6 +14,8 @@ body {
   background-repeat: no-repeat;
   background-position: center top;
   overflow: hidden;
+  
+  justify-content: center;
 }
 
 body::before {

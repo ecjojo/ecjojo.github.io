@@ -3,6 +3,7 @@
 * {
   color: azure;
   font-family: "Syne Mono", monospace;
+
 }
 
 body {
@@ -14,8 +15,9 @@ body {
   background-repeat: no-repeat;
   background-position: center top;
   overflow: hidden;
-
+  height: 100%;
   justify-content: center;
+
 }
 
 
@@ -26,13 +28,13 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(186, 211, 247, 0.1);
+  background: rgba(186, 211, 247, 0.15);
   /* 這裡的 0.5 可以調透明度 */
   z-index: 0;
 }
 
 .clock {
-    position: absolute;
+  position: absolute;
   padding-top: 10px;
 }
 
@@ -47,8 +49,8 @@ body::before {
 }
 
 h1 {
-  font-size: 68px;
-  padding-top: 100px;
+  font-size: 66px;
+  padding-top: 110px;
   margin: 0;
 
   z-index: 10;
@@ -57,7 +59,7 @@ h1 {
 .title span {
   display: inline-block;
   transition: transform 0.5s ease;
-  letter-spacing: -30px;
+  letter-spacing: -28px;
   /* 調整字距，負值會讓字靠近 */
 }
 
@@ -120,11 +122,11 @@ h1 {
 
 
 h2 {
-  padding-bottom: 20px;
+  padding-bottom: 50px;
 }
 
 .navbar {
-  background-color: rgba(240, 255, 255, 0.2);
+  background-color: rgba(30, 31, 34, 0.018);
   padding-left: 40px;
   padding-right: 40px;
   height: 50px;
@@ -132,9 +134,14 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.8rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 
+    
+  
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .navbar a {
@@ -157,14 +164,14 @@ h2 {
   visibility: hidden;
   opacity: 0;
   width: max-content;
-  background-color: rgba(137, 150, 157, 0.447);
-  color: #fff;
+  background-color: rgba(124, 140, 150, 0.2);
+  color: azure;
   text-align: center;
 
   border-radius: 50px;
   padding: 5px 8px;
   position: absolute;
-  bottom: -140%;
+  bottom: 140%;
   /* 出現在 icon 上方 */
   left: 50%;
   transform: translateX(-50%) translateY(10px);
@@ -172,6 +179,9 @@ h2 {
   white-space: nowrap;
   font-size: 12px;
   z-index: 10;
+  
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .tooltip:hover .tooltip-text {
@@ -186,8 +196,6 @@ h2 {
   top: -350px;
 }
 
-
-
 .time1 {
   position: absolute;
   top: 340px;
@@ -195,7 +203,7 @@ h2 {
   display: flex;
   align-items: center;
   flex-direction: column;
-  
+
   width: 300px;
 }
 
@@ -206,7 +214,7 @@ h2 {
   display: flex;
   align-items: center;
   flex-direction: column;
-  
+
   width: 300px;
 }
 
@@ -224,10 +232,10 @@ h2 {
   position: relative;
   width: 1px;
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 15px 0;
   transform: translateX(-50%);
   background: white;
-  
+
 }
 
 .point {
@@ -236,7 +244,7 @@ h2 {
   border-radius: 50%;
   position: relative;
   font-size: 14px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -288,6 +296,10 @@ h2 {
   user-select: none;
   transition: transform 0.25s ease;
 
+  
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(10px);
+
 }
 
 @keyframes bubblePulse {
@@ -333,13 +345,39 @@ h2 {
 }
 */
 .bubble.evade {
-  background-color: #3f3f3f30;
-  font-size: 0.9rem;
+  background-color: #1f1f1f03;
+  font-size: 0.8rem;
   padding: 0.4rem;
-  color: #ffffff79;
+  color: #ffffff31;
   width: auto;
   height: auto;
   border-radius: 50px;
   border-color: rgba(92, 92, 92, 0.176);
   cursor: default;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background: rgba(20, 21, 24, 0.6);
+  color: #fff;
+  font-size: 16px;
+  border-top: 1px solid #333;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.char-img {
+  position: fixed;   /* 固定在視窗 */
+  bottom: 0px;         /* 靠下 */
+  right: 10px;           /* 靠左 */
+  width: 380px;      /* 自行調整大小 */
+  z-index: 9999;     /* 保證在最上層 */
+  pointer-events: none; /* 如果不希望擋住點擊，可以加這行 */
 }

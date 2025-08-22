@@ -1,10 +1,9 @@
-
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.querySelector('.canvas');
   const nodes = Array.from(document.querySelectorAll('.bubble'));
   if (!canvas || nodes.length === 0) return;
 
-  // 指標狀態：用容器層級追蹤，避免逐顆監聽
+  // 指標狀態
   const pointer = { active:false, x:0, y:0 };
   canvas.addEventListener('pointerenter', e => { pointer.active = true; });
   canvas.addEventListener('pointerleave', e => { pointer.active = false; });
@@ -14,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pointer.y = e.clientY - c.top;
   }, { passive:true });
 
+  // 初始化泡泡
   const bubbles = nodes.map(el => {
     const rect = el.getBoundingClientRect();
     const crect = canvas.getBoundingClientRect();
@@ -42,6 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   });
 
+  // 初始化固定點 (point)
+  const points = Array.from(document.querySelectorAll('.point')).map(el => {
+    const rect = el.getBoundingClientRect();
+    const crect = canvas.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    const r = Math.min(w, h) / 2;
+    return {
+      el,
+      r,
+      x: (rect.left - crect.left) + w/2,
+      y: (rect.top  - crect.top)  + h/2
+    };
+  });
+
   const cfg = {
     dt: 1 / 60,
     fric: 0.98,
@@ -49,35 +64,31 @@ document.addEventListener('DOMContentLoaded', () => {
     ballRest: 0.9,
     pad: 0,
     // 懼怕參數
-    evadeRadius: 30,       // 作用範圍
-    evadeForce: 0.7,        // 推力係數
-    evadeKick: 2,          // 被直接 hover 時瞬間踢退
-    evadeNoClickMS: 260     // 踢退後短時間內吃掉點擊
+    evadeRadius: 30,
+    evadeForce: 0.7,
+    evadeKick: 2,
+    evadeNoClickMS: 260
   };
 
-  // 只對非懼怕泡泡開啟拖曳事件
+  // 拖曳與懼怕邏輯（略，與原版相同）
   const DRAG_TOL = 5;
   bubbles.forEach(b => {
     const el = b.el;
     el.style.zIndex = '1';
 
     if (b.isEvade){
-      // 懼怕類：若真的有 hover 到，立刻踢退一小步並吃掉點擊
       el.addEventListener('pointerover', e => {
         const kick = cfg.evadeKick;
         const c = canvas.getBoundingClientRect();
         const dirx = Math.sign(b.x - (e.clientX - c.left)) || (Math.random() < .5 ? -1 : 1);
-        const diry = Math.sign(b.y - (e.clientY - c.top)) || (Math.random() < .5 ? -1 : 1);
+        const diry = Math.sign(b.y - (e.clientY - c.top))  || (Math.random() < .5 ? -1 : 1);
         b.vx += dirx * kick; b.vy += diry * kick;
-        // 立即吃掉點擊，做成「碰不到」的手感
         el.addEventListener('click', ev => { ev.preventDefault(); ev.stopPropagation(); }, { capture:true, once:true });
       });
-      // 禁止原生拖移影響
       el.addEventListener('dragstart', e => e.preventDefault());
-      return; // 不綁拖曳行為
+      return;
     }
 
-    // 以下為可拖曳類
     el.addEventListener('pointerdown', e => {
       b.dragging = true;
       b.pointerId = e.pointerId;
@@ -144,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         b.x += b.vx; b.y += b.vy;
       }
 
-      // 懼怕規則：指標到懼怕泡泡中心距離內，給一個反向推力
+      // 懼怕規則
       if (b.isEvade && pointer.active){
         const nx = b.x - pointer.x;
         const ny = b.y - pointer.y;
@@ -154,10 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d < cfg.evadeRadius){
             const ux = nx / d; const uy = ny / d;
             const strength = (1 - d / cfg.evadeRadius) * cfg.evadeForce;
-            b.vx += ux * strength * 3; // 乘個係數讓反應更靈敏
+            b.vx += ux * strength * 3;
             b.vy += uy * strength * 3;
 
-            // 太近時做「傳送踢退」，確保真的點不到
             if (d < b.r + 8){
               const kick = cfg.evadeKick * 1.5;
               b.x = clamp(b.x + ux * kick, b.r + cfg.pad, c.width  - b.r - cfg.pad);
@@ -174,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (b.y + b.r > c.height - cfg.pad){ b.y = c.height - b.r - cfg.pad; b.vy = -Math.abs(b.vy) * cfg.wallRest; }
     }
 
-    // 泡泡碰撞（同質量一維法向交換），懼怕與一般互動一致
+    // 泡泡互撞
     for (let i = 0; i < bubbles.length; i++){
       for (let j = i + 1; j < bubbles.length; j++){
         const a = bubbles[i], b = bubbles[j];
@@ -194,6 +204,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const btx = b.vx - bvn*ux; const bty = b.vy - bvn*uy;
             if (!a.dragging){ a.vx = atx + avn2*ux; a.vy = aty + avn2*uy; }
             if (!b.dragging){ b.vx = btx + bvn2*ux; b.vy = bty + bvn2*uy; }
+          }
+        }
+      }
+    }
+
+    // 泡泡 vs 固定 point 撞擊
+    for (const b of bubbles){
+      for (const p of points){
+        const nx = b.x - p.x;
+        const ny = b.y - p.y;
+        const dist2 = nx*nx + ny*ny;
+        const minD = b.r + p.r;
+        if (dist2 > 0){
+          const dist = Math.sqrt(dist2);
+          if (dist < minD){
+            const ux = nx / dist;
+            const uy = ny / dist;
+            const pen = minD - dist;
+            b.x += ux * pen;
+            b.y += uy * pen;
+
+            const vn = b.vx*ux + b.vy*uy;
+            const tx = b.vx - vn*ux;
+            const ty = b.vy - vn*uy;
+            b.vx = tx - vn*ux * cfg.ballRest;
+            b.vy = ty - vn*uy * cfg.ballRest;
           }
         }
       }
@@ -228,4 +264,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   requestAnimationFrame(loop);
-  });
+});

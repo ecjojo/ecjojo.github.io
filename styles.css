@@ -28,7 +28,7 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(186, 211, 247, 0.15);
+  background: rgba(6, 6, 6, 0.5);
   /* 這裡的 0.5 可以調透明度 */
   z-index: 0;
 }
@@ -138,8 +138,6 @@ h2 {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
 
-    
-  
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -152,43 +150,8 @@ h2 {
 
 .navbar a:hover {
   transform: scale(1.2);
-
 }
 
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltip-text {
-  visibility: hidden;
-  opacity: 0;
-  width: max-content;
-  background-color: rgba(124, 140, 150, 0.2);
-  color: azure;
-  text-align: center;
-
-  border-radius: 50px;
-  padding: 5px 8px;
-  position: absolute;
-  bottom: 140%;
-  /* 出現在 icon 上方 */
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  transition: opacity 0.3s, transform 0.3s;
-  white-space: nowrap;
-  font-size: 12px;
-  z-index: 10;
-  
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
 
 .line {
   position: absolute;
@@ -228,33 +191,45 @@ h2 {
   width: 300px;
 }
 
-.timeline {
-  position: relative;
-  width: 1px;
-  margin: 0 auto;
-  padding: 15px 0;
-  transform: translateX(-50%);
-  background: white;
-
-}
 
 .point {
   display: inline-block;
   padding: 20px 15px;
   border-radius: 50%;
-  position: relative;
   font-size: 14px;
   background: rgba(255, 255, 255, 0);
   backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: #fff;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline {
+  position: relative;
+  width: 1px;
+  margin: 0 auto;
+  padding: 15px 0;
+  background: white;
+
+  opacity: 0;
+  transform: scaleY(0);
+  transition: all 0.6s ease;
+  transform-origin: top;
 }
 
 .timeline-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
   position: relative;
-  width: 300px;
+  width: 400px;
 }
 
 .timeline-item.left {
@@ -265,6 +240,39 @@ h2 {
 .timeline-item.right {
   left: 46%;
   text-align: left;
+}
+
+/* hover 效果：每個年份獨立觸發 */
+.time1:hover .timeline,
+.time2:hover .timeline,
+.time3:hover .timeline,
+.time1:hover .timeline-item,
+.time2:hover .timeline-item,
+.time3:hover .timeline-item {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+/* 逐行延遲：只針對 p */
+.timeline-item:nth-of-type(1) {
+  transition-delay: 0.1s;
+}
+.timeline-item:nth-of-type(2) {
+  transition-delay: 0.3s;
+}
+.timeline-item:nth-of-type(3) {
+  transition-delay: 0.5s;
+}
+
+/* 逐段線條延遲 */
+.timeline:nth-of-type(1) {
+  transition-delay: 0.05s;
+}
+.timeline:nth-of-type(2) {
+  transition-delay: 0.25s;
+}
+.timeline:nth-of-type(3) {
+  transition-delay: 0.45s;
 }
 
 .canvas {
@@ -354,8 +362,8 @@ h2 {
   border-radius: 50px;
   border-color: rgba(92, 92, 92, 0.176);
   cursor: default;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .footer {
@@ -369,15 +377,87 @@ h2 {
   color: #fff;
   font-size: 16px;
   border-top: 1px solid #333;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(5px);
+
+  
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(10px);
+
 }
 
-.char-img {
-  position: fixed;   /* 固定在視窗 */
-  bottom: 0px;         /* 靠下 */
-  right: 10px;           /* 靠左 */
-  width: 380px;      /* 自行調整大小 */
-  z-index: 9999;     /* 保證在最上層 */
-  pointer-events: none; /* 如果不希望擋住點擊，可以加這行 */
+.game-btn a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 999px; /* 水晶膠囊 */
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  margin-top: 40px;
+  position: relative;
+  overflow: hidden;
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(10px);
+
+}
+
+/* Icon 有淡淡的藍色光暈 */
+.game-btn i {
+  font-size: 22px;
+  color: #ffffff;
+  filter: drop-shadow(0 0 1px #00eaff);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* hover 效果：膠囊會發光並微浮起 */
+.game-btn a:hover {
+  transform: translateY(-4px);
+  color: #9bfff5;
+  border-color: rgba(0, 255, 255, 0.6);
+  box-shadow: 0 6px 15px rgba(0, 255, 255, 0.2),
+              inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.game-btn a:hover i {
+  transform: scale(1.2) rotate(8deg);
+  color: #9bfff5;
+  filter: drop-shadow(0 0 10px #00fff2);
+}
+
+/* tooltip 變成小小宇宙星雲 */
+.tooltip {
+  position: relative;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  background: rgba(20, 20, 30, 0.9);
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 50px;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.85);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 1px rgba(0, 255, 255, 0.3),
+              0 0 2px rgba(150, 0, 255, 0.4);
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.particle {
+  position: fixed;
 }

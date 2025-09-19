@@ -4,9 +4,14 @@
   font-family: "Syne Mono", monospace;
   color: black;
 }
+h1
+{
+  margin-left: 15px;
+}
 
 h2 {
   font-size: 18px;
+  letter-spacing: 1px;
 }
 
 hr {
@@ -15,12 +20,33 @@ hr {
   margin: 40px 0;
 }
 
+iframe{
+  margin-bottom: 20px;
+}
+
+a{
+  background-color: black;
+  color: white;
+  margin: 2px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 20px;
+  text-decoration: none;
+
+}
+
+img{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .title {
   text-align: center;
 }
 
 .title span {
   display: inline-block;
+  letter-spacing: 20px;
   transition: transform 0.3s ease;
 }
 

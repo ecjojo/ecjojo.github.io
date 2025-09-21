@@ -216,3 +216,16 @@ footer {
   display: block;
   /* 點擊的才顯示 */
 }
+
+.summary
+{
+    border-radius: 15px;
+    border: #000000 2px solid;
+    width: 460px;
+    margin: 10px auto;
+    margin-bottom: 40px;
+    padding: 20px 30px;
+    line-height: 26px;
+    font-style: italic;
+    font-size: 14px;
+}

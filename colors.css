@@ -1,0 +1,27 @@
+/* colors.css - 輕森系配色方案 */
+:root {
+    /* 主色調：清新的森林漸層 */
+    --gradient-primary: linear-gradient(135deg, #92b0a5 0%, #84a79e 100%);
+
+    /* 輔助色調：林間晨光 */
+    --gradient-secondary: linear-gradient(45deg, #a0bdb0, #8aa99f);
+
+    /* 文字與背景色 */
+    --color-white: rgba(255, 255, 255, 0.9);
+
+    /* 文字色 */
+    --color-text: #445b4e;
+
+    /* 卡片與容器背景 */
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-border: rgba(255, 255, 255, 0.5);
+
+    /* 毛玻璃效果背景 */
+    --glass-bg: rgba(255, 255, 255, 0.4);
+    --glass-border: rgb(255, 255, 255, 0.5);
+
+    /* 狀態色 */
+    --status-featured: #6AB7A2;
+
+    --shadow: 0 6px 20px rgba(106, 183, 162, 0.12);
+}

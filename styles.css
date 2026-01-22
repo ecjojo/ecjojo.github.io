@@ -467,7 +467,7 @@ color: var(--color-white);
 }
 
 .exp-content li::before {
-    content: '🍃';
+    content: '';
     position: absolute;
     left: 0;
     color: var(--color-forest-medium);
@@ -539,7 +539,7 @@ color: var(--color-white);
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background:white;
+    background:rgb(58, 58, 58);
 }
 
 .dot.filled {

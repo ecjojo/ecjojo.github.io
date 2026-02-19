@@ -1,1044 +1,1097 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ecjojo | 一人遊戲開發</title>
-    <link rel="stylesheet" href="colors.css">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@ecjojo — 遊戲開發 × ComfyUI × 媒體創作</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080b10;
+  --surface: #0d1117;
+  --s2: #12181f;
+  --neon: #00ffe0;
+  --lime: #b8ff00;
+  --pink: #ff2d78;
+  --orange: #ff6b00;
+  --white: #eef2f7;
+  --muted: #4a5568;
+  --border: #1a2030;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CURSOR */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--neon);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: screen;
+}
+.cursor.big { width: 44px; height: 44px; background: var(--pink); }
+
+/* SCAN LINE */
+body::after {
+  content:'';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,224,0.012) 2px, rgba(0,255,224,0.012) 4px);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 40px;
+  z-index: 500;
+  background: linear-gradient(to bottom, rgba(8,11,16,0.97), transparent);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 4px;
+  color: var(--neon);
+  text-shadow: 0 0 20px rgba(0,255,224,0.5);
+}
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+}
+.nav-links a:hover { opacity: 1; color: var(--neon); }
+.nav-badge {
+  background: var(--pink);
+  color: white;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  text-transform: uppercase;
+  animation: pulse-badge 2s infinite;
+}
+@keyframes pulse-badge { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,224,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,224,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,255,224,0.07) 0%, transparent 70%);
+  top: 10%; left: -10%;
+  pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,45,120,0.05) 0%, transparent 70%);
+  bottom: 10%; right: 5%;
+  pointer-events: none;
+}
+.hero-tag {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--neon);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s forwards;
+}
+.hero-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 12vw, 180px);
+  line-height: 0.88;
+  letter-spacing: 2px;
+  color: var(--white);
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero-name .neon { color: var(--neon); text-shadow: 0 0 40px rgba(0,255,224,0.4); }
+.hero-name .pink { color: var(--pink); text-shadow: 0 0 40px rgba(255,45,120,0.4); }
+.hero-sub {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  color: rgba(238,242,247,0.55);
+  margin-top: 24px;
+  letter-spacing: 1px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.65s forwards;
+}
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 48px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.85s forwards;
+}
+.stat { text-align: left; }
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  color: var(--neon);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+  opacity: 0;
+  animation: fadeUp 0.7s 1s forwards;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--neon);
+  color: var(--bg);
+  padding: 14px 28px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 3px 3px 0 var(--pink); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  padding: 14px 28px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-secondary:hover { background: rgba(0,255,224,0.08); }
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(24px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* MARQUEE */
+.marquee-wrap {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--neon);
+  padding: 9px 0;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+.marquee-track span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 3px;
+  color: var(--bg);
+  padding: 0 28px;
+  white-space: nowrap;
+}
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* SECTIONS */
+.section { padding: 90px 40px; border-top: 1px solid var(--border); }
+.section-label {
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--neon);
+  margin-bottom: 14px;
+}
+.section-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 8vw, 110px);
+  letter-spacing: 1px;
+  line-height: 0.95;
+  margin-bottom: 60px;
+}
+
+/* ABOUT */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-text {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  line-height: 2;
+  color: rgba(238,242,247,0.65);
+  margin-bottom: 36px;
+}
+.skills-cats { display: flex; flex-direction: column; gap: 20px; }
+.skill-cat-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-pill {
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  font-family: 'Space Mono', monospace;
+}
+.skill-pill:hover { border-color: var(--neon); color: var(--neon); background: rgba(0,255,224,0.04); }
+.skill-pill.hot { border-color: rgba(0,255,224,0.3); color: var(--neon); }
+
+/* TIMELINE */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.timeline-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-year {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--border);
+  line-height: 1;
+  padding-top: 2px;
+}
+.timeline-dot {
+  position: absolute;
+  left: 108px;
+  top: 36px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--neon);
+  box-shadow: 0 0 10px var(--neon);
+}
+.timeline-content {}
+.timeline-title {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--white);
+}
+.timeline-org {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--neon);
+  margin-bottom: 10px;
+}
+.timeline-desc {
+  font-size: 12px;
+  line-height: 1.9;
+  color: rgba(238,242,247,0.5);
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* WORKS GRID */
+.works-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 18px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  cursor: none;
+  transition: all 0.2s;
+  font-family: 'Space Mono', monospace;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--neon);
+  color: var(--neon);
+  background: rgba(0,255,224,0.04);
+}
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 210px;
+  gap: 2px;
+}
+.work-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: none;
+  transition: border-color 0.3s;
+}
+.work-card:hover { border-color: rgba(0,255,224,0.3); }
+.work-card.wide  { grid-column: span 2; }
+.work-card.tall  { grid-row: span 2; }
+.work-card.wide.tall { grid-column: span 2; grid-row: span 2; }
+
+/* card bg accent */
+.work-card::before {
+  content:'';
+  position: absolute;
+  inset: 0;
+  background: var(--card-accent, linear-gradient(135deg, transparent 60%, rgba(0,255,224,0.04)));
+  transition: opacity 0.3s;
+}
+.work-card:hover::before { opacity: 1.5; }
+
+.card-img {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  width: 100%; height: 100%;
+  opacity: 0.2;
+  transition: opacity 0.4s, transform 0.5s;
+  filter: saturate(0);
+}
+.work-card:hover .card-img { opacity: 0.35; transform: scale(1.05); filter: saturate(0.5); }
+
+.card-num {
+  position: absolute;
+  top: 16px; left: 18px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  z-index: 2;
+}
+.card-tags {
+  position: absolute;
+  top: 14px; right: 14px;
+  display: flex; gap: 4px;
+  z-index: 2;
+}
+.card-tag {
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.card-tag.game { border-color: rgba(184,255,0,0.3); color: var(--lime); }
+.card-tag.ai   { border-color: rgba(0,255,224,0.3); color: var(--neon); }
+.card-tag.tool { border-color: rgba(255,107,0,0.3); color: var(--orange); }
+.card-tag.new  { border-color: rgba(255,45,120,0.4); color: var(--pink); background: rgba(255,45,120,0.08); }
+
+.card-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 18px;
+  background: linear-gradient(to top, rgba(8,11,16,0.95) 60%, transparent);
+  z-index: 2;
+}
+.card-title {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 4px;
+  transition: color 0.2s;
+}
+.work-card:hover .card-title { color: var(--neon); }
+.work-card.wide.tall .card-title, .work-card.wide .card-title { font-size: 18px; }
+.card-desc {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  font-family: 'Noto Sans TC', sans-serif;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+.work-card:hover .card-desc { max-height: 60px; }
+.card-link {
+  position: absolute;
+  bottom: 18px; right: 16px;
+  width: 30px; height: 30px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  z-index: 3;
+  opacity: 0;
+  transform: scale(0.7) rotate(-45deg);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s;
+  text-decoration: none;
+  color: var(--bg);
+}
+.work-card:hover .card-link {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  background: var(--neon);
+  border-color: var(--neon);
+}
+
+/* LINKS */
+.links-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.contact-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 7vw, 100px);
+  line-height: 0.92;
+  letter-spacing: 1px;
+}
+.contact-heading .neon { color: var(--neon); text-shadow: 0 0 30px rgba(0,255,224,0.35); }
+.contact-sub {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  color: rgba(238,242,247,0.45);
+  margin-top: 20px;
+  line-height: 1.9;
+}
+.collab-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.collab-chip {
+  border: 1px solid rgba(0,255,224,0.2);
+  color: var(--neon);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  font-family: 'Space Mono', monospace;
+}
+
+.link-list { display: flex; flex-direction: column; }
+.link-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s;
+}
+.link-row::before {
+  content:'';
+  position: absolute;
+  left: -100%; top: 0; bottom: 0; width: 100%;
+  background: var(--neon);
+  transition: left 0.35s cubic-bezier(0.77,0,0.18,1);
+  z-index: 0;
+}
+.link-row:hover::before { left: 0; }
+.link-row:hover { color: var(--bg); }
+.link-row > * { position: relative; z-index: 1; }
+.link-info {}
+.link-name {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+.link-handle {
+  font-size: 10px;
+  letter-spacing: 1px;
+  opacity: 0.5;
+  margin-top: 2px;
+}
+.link-row:hover .link-handle { opacity: 0.6; }
+.link-arr { font-size: 18px; }
+
+/* FOOTER */
+footer {
+  padding: 28px 40px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--neon); }
+
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s, transform 0.7s; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+</style>
 </head>
-
 <body>
-    <div class="container">
-        <!-- 標題區 -->
-        <header class="header">
-            <h1 class="main-title">周依希 Jenny</h1>
-            <p class="subtitle">遊戲與工具開發 x 媒體創作 x ComfyUI工作流</p>
-        </header>
 
-        <!-- 導航 -->
-        <nav class="nav">
-            <button class="nav-btn active" data-target="home" title="主頁">
-                <i class="fas fa-home"></i>
-                <span>主頁</span>
-            </button>
-            <button class="nav-btn" data-target="projects" title="作品集">
-                <i class="fas fa-gamepad"></i>
-                <span>作品集</span>
-            </button>
-            <button class="nav-btn" data-target="exp" title="工作經歷">
-                <i class="fas fa-briefcase"></i>
-                <span>工作經歷</span>
-            </button>
-            <button class="nav-btn" data-target="social" title="連結/合作聯繫">
-                <i class="fas fa-link"></i>
-                <span>連結 / 合作聯繫</span>
-            </button>
-        </nav>
-
-
-        <main class="content">
-
-            <section id="home" class="section active">
-
-
-                <div class="section-header">
-                    <h2><i class="fas fa-home"></i> 文章內容訂閱</h2>
-                </div>
-
-                <div class="social-grid" style="margin-bottom: 60px;">
-
-                    <a href="https://www.patreon.com/ecjojo" class="social-card email" target="_blank">
-                        <div class="social-icon">
-                            <i class="fas fa-code-branch"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>Patreon</h3>
-                            <span class="social-handle">ComfyUI 教學</span>
-                        </div>
-                    </a>
-
-                    <a href="https://www.patreon.com/ecjojodev" class="social-card email" target="_blank">
-                        <div class="social-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>Patreon</h3>
-                            <span class="social-handle"> Unity 遊戲開發</span>
-                        </div>
-                    </a>
-
-                    <a href="https://ecjojo.blogspot.com" class="social-card email" target="_blank">
-                        <div class="social-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>Blogger</h3>
-                            <span class="social-handle"> 筆記 & 遊戲攻略</span>
-                        </div>
-                    </a>
-
-                </div>
-
-
-                <div class="section-header" style="margin-bottom: 60px;">
-                    <h2><i class="fas fa-seedling"></i> 開發中項目</h2>
-                </div>
-
-                <div class="cards-grid" style="margin-bottom: 40px;">
-                    <div class="card">
-                        <div class="card-icon">
-                            <i class="fas fa-gamepad"></i>
-
-                        </div>
-
-                        <h3>2026 多人遊戲計劃 (項目贊助 : Yayapipi)</h3>
-                        <h3>預計進度目標</h3>
-                        <h4 style="font-weight: 400;">3/15: 做出可玩版本</h4>
-                        <div class="progress-container">
-                            <div class="progress-bar" style="width: 11%"></div>
-                            <span>進行中 (11%)</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://www.patreon.com/posts/wei-lai-you-xi-145883692" class="btn-link"><i
-                                    class="fas fa-book"></i> 開發計劃</a>
-                            <a href="https://discord.gg/2uFuM9UjEJ" class="btn-link"><i class="fas fa-comments"></i>
-                                Discord</a>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- 
-                    <div class="card">
-                        <div class="card-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <h3>2026 計劃 | Notion 範本</h3>
-
-                        <div class="progress-container">
-                            <div class="progress-bar" style="width: 2%"></div>
-                            <span>進行中 (2%)</span>
-                        </div>
-                        <div class="project-links">
-                        </div>
-                    </div>
-                    -->
-
-                </div>
-
-
-
-
-                <div class="section-header">
-                    <h2><i class="fas fa-seedling"></i> 里程碑</h2>
-                </div>
-
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">2025 </div>
-                        <div class="timeline-content">
-                            <p>經營Patreon 撰寫 遊戲開發 內容</p>
-                            <p>用 3 個月完成 3 個 Unity 遊戲開發項目</p>
-                            <div class="project-links">
-                                <a href=" https://ecjojo.itch.io/Garden" class="btn-link"><i class="fas fa-gamepad"></i>
-                                    #1 Garden </a>
-                                <a href="https://ecjojo.itch.io/Campfire" class="btn-link"><i
-                                        class="fas fa-gamepad"></i>
-                                    #2 Campfire </a>
-                                <a href="https://ecjojo.itch.io/Factory" class="btn-link"><i class="fas fa-gamepad"></i>
-                                    #3 Factory</a>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2024 </div>
-                        <div class="timeline-content">
-                            <p>全職接案 | 經營Patreon 撰寫 ComfyUI 內容教學 </p>
-                            <p>提供 4 個企業級客戶 ComfyUI 工作流設計 / 產品開發顧問服務</p>
-                            <p>20+ 私人和企業教學時數, 撰寫50+ AI生成教學內容, 多平台會員人數600+</p>
-                            <p>Top 40 CivitAI Writer</p>
-                            <div class="project-links">
-                                <a href="https://www.patreon.com/ecjojo" class="btn-link"><i class="fas fa-book"></i>
-                                    Patreon (250)</a>
-                                <a href="https://discord.gg/7cDb4vSH3z" class="btn-link"><i class="fas fa-comments"></i>
-                                    Discord (430)</a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2023 </div>
-                        <div class="timeline-content">
-                            <p>ComfyUI 早期用戶 | 開始撰寫 ComfyUI 內容</p>
-                            <p>為公司項目引入 AI 生成技術: Stable Diffusion/ ComfyUI</p>
-                            <div class="project-links">
-
-                                <a href="https://civitai.com/user/ecjojo" class="btn-link"><i class="fas fa-link"></i>
-                                    CivitAI </a>
-                                <a href="https://openart.ai/workflows/profile/ecjojo" class="btn-link"><i
-                                        class="fas fa-link"></i> OpenArtAI</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2022 </div>
-                        <div class="timeline-content">
-                            <p>1000 Youtube 訂閱人數</p>
-
-                            <p>接案 Unity 開發 : 完成 12單元 數學課程互動教材 </p>
-                            <p>建立 VTuber 社群 </p>
-                            <p>完成 UWE Bristol 數碼媒體學位 | 獲得香港卓越獎學金計劃 全額獎學金</p>
-                            <div class="project-links">
-
-                                <a href="https://discord.gg/ASV5WEcRES" class="btn-link"><i class="fas fa-comments"></i>
-                                    Discord</a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2021 </div>
-                        <div class="timeline-content">
-                            <p>參與製作 胡恩威科技劇場裝置《心經即是巴哈》Unity 遊戲開發 (2021年 DFA 亞洲設計優異獎)</p>
-                            <p>獲得 Unity 認證遊戲開發者證書</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2019 </div>
-                        <div class="timeline-content">
-                            <p>學習遊戲開發與動畫設計, 使用 Unity 製作超過20個遊戲項目</p>
-                            <p>C#編程, 2D和3D素材製作, 多人遊戲, 電腦/手機平台, AR/VR</p>
-                        </div>
-                    </div>
-                </div>
-
-                <br>
-
-
-                <div class="contact-section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-seedling"></i> Special Thanks</h2>
-                    </div>
-                    <div class="contact-card">
-
-
-                        <br>
-                        <p style="line-height: 26px;"> Jessica Wai, Joyce Chow, George Ng, Benny Kok@ComfyDeploy,
-                            Karrix@ComfyDeploy, 松音,
-                            藍夏月, Jiun, Mindos Cheng, Meta Intelligence,
-                            Minyeop
-                            Choi, 徐嘉鴻,
-                            Tom Tong@Softmind Ltd, 林里歐, 水溝鳥, Octonion Prime, VTI, Allen Chan, Nathan Lee, 林峻維, ktkt
-                            ktkt, UJOB S, Maggie Yang, Izak J@GracyWoods Games Ltd.,
-                            Yayapipi
-                        </p>
-
-                    </div>
-
-
-                </div>
-
-
-            </section>
-
-            <!-- 開發/作品 -->
-            <section id="projects" class="section">
-                <div class="section-header">
-                    <h2><i class="fas fa-gamepad"></i> Unity 遊戲開發</h2>
-                </div>
-
-                <div class="project-grid">
-                    <div class="project-card featured">
-                        <div class="project-tag">⭐New</div>
-                        <h3>Factory (v1)</h3>
-                        <img src="https://img.itch.zone/aW1nLzI0MTA3NDE3LnBuZw==/315x250%23c/OkiImS.png"
-                            alt="game-factory" class="img">
-                        <p>Create your own cozy automated bean world. November 2025</p>
-                        <div class="project-tech">
-                            <span>Unity</span>
-                            <span>Web</span>
-                        </div>
-
-                        <div class="project-links">
-                            <a href="#" class="btn-link"><i class="fas fa-book"></i> 遊戲介紹</a>
-                            <a href="https://ecjojo.itch.io/factory" class="btn-link"><i class="fas fa-play"></i>
-                                在線遊玩</a>
-                        </div>
-                    </div>
-
-                    <div class="project-card featured">
-                        <div class="project-tag">⭐New</div>
-                        <h3>Campfire (v1)</h3>
-                        <img src="https://img.itch.zone/aW1nLzIzNzI5NTY3LnBuZw==/315x250%23c/jdwj0m.png"
-                            alt="game-factory" class="img">
-                        <p>Chop wood, light a campfire. October 2025</p>
-                        <div class="project-tech">
-                            <span>Unity</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="btn-link"><i class="fas fa-book"></i> 遊戲介紹</a>
-                            <a href="https://ecjojo.itch.io/campfire" class="btn-link"><i class="fas fa-play"></i>
-                                下載連結</a>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card featured">
-                        <div class="project-tag">⭐New</div>
-                        <h3>Garden (v1)</h3>
-                        <img src="https://img.itch.zone/aW1nLzIzMjA1NzE4LnBuZw==/315x250%23c/4VpYFy.png"
-                            alt="game-factory" class="img">
-                        <p>Create and enjoy your own cozy garden. September 2025</p>
-                        <div class="project-tech">
-                            <span>Unity</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="btn-link"><i class="fas fa-book"></i> 遊戲介紹</a>
-                            <a href="https://ecjojo.itch.io/garden" class="btn-link"><i class="fas fa-play"></i>
-                                下載連結</a>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <br>
-                <br>
-
-                <div class="section-header">
-                    <h2><i class="fas fa-code-branch"></i>個人創意項目</h2>
-                </div>
-
-                <br>
-
-
-                <div class="project-grid">
-
-                    <div class="project-card">
-                        <h3>Toolbox</h3>
-                        <img src="assets/image.png" alt="img" class="img">
-                        <p>Emoji Clipbook. </p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Website</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://ecjojo.github.io/toolbox/" class="btn-link"><i class="fas fa-link"></i>
-                                Website</a>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Magic Cat</h3>
-                        <img src="assets/project_3.webp" alt="img" class="img">
-                        <p>Stable Diffusion Prompt Clipbook+ OpenPose Canvas. </p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Website</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://magic-cat.vercel.app/" class="btn-link"><i class="fas fa-link"></i>
-                                Website</a>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Image Gen Discord Bot</h3>
-                        <img src="assets/img (5).webp" alt="img" class="img">
-                        <p>Open Source – ComfyUI Discord Bot Template.</p>
-                        <div class="project-tech">
-                            <span>ComfyDeploy API</span> <span>Discord Bot</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/ecjojo/DiscordBot-ComfyDeployAPI-Template" class="btn-link"><i
-                                    class="fas fa-link"></i>
-                                Github</a>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>ComfyUI Workflow Template</h3>
-                        <img src="assets/img (7).webp" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> ComfyUI Workflow</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/ecjojo/ecjojo-comfyui-workflows" class="btn-link"><i
-                                    class="fas fa-link"></i>
-                                Github (100⭐)</a>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>Custom Node Template</h3>
-                        <img src="assets/img (5).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> ComfyUI Custom Node</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/ecjojo/ecjojo-example-nodes" class="btn-link"><i
-                                    class="fas fa-link"></i>
-                                Github</a>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Figma OpenPose Editor</h3>
-                        <img src="assets/img (3).webp" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Figma</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="figma.com/files/team/1051022012957849820/resources/community/file/1288015902984398757/openpose-editor-figma"
-                                class="btn-link"><i class="fas fa-link"></i>
-                                Figma (180 Users)</a>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>Text to Music</h3>
-                        <iframe width="220" height="120" src="https://www.youtube.com/embed/M2ITdbCeOg4"
-                            title="App | 🎼Text to Music - Google Play Download ▶" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <p> My First App on Google Play.</p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>Game Project</h3>
-                        <iframe width="220" height="120" src="https://www.youtube.com/embed/cvirS2T7Ubs"
-                            title="Oshaberi Doubutsu in Game" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <p>Gameplay video reached 450K+ views on YouTube.</p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>AI Crystal Ball Divination</h3>
-                        <img src="assets/project_1.webp" alt="img" class="img">
-                        <p> Chatgpt + AI Image Gen + Voice.</p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Website</span>
-                        </div>
-                    </div>
-
-
-
-                    <div class="project-card">
-                        <h3>English Desk</h3>
-                        <img src="assets/img (2).jpeg" alt="img" class="img">
-                        <p>AI English Learning Tool</p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Website</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3> Lunar Calendar</h3>
-                        <img src="assets/img (4).png" alt="img" class="img">
-
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Website</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://eccalendar.vercel.app/" class="btn-link"><i class="fas fa-link"></i>
-                                Website</a>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Chrome Extension 開發 - Vision Anything</h3>
-                        <img src="assets/project_2.png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span>Chrome Extension Dev</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Discord Bot 開發 - Schedule Bot</h3>
-                        <img src="assets/img (1).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Discord Bot Dev</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Custom Node 開發 - Character A Pose Image</h3>
-                        <img src="assets/img (12).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Custom Node Dev</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>AI Waifu Project</h3>
-                        <img src="assets/img (10).webp" alt="img" class="img">
-                        <p>Designed AI characters with personality.</p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Chatgpt</span> <span> Stable Diffusion</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>AI Influencer Project</h3>
-                        <img src="assets/img (9).webp" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Stable Diffusion</span>
-                        </div>
-
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Character LoRA Training</h3>
-                        <img src="assets/img (6).webp" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> LoRA Training</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>Math Monster</h3>
-                        <iframe width="220" height="120" src="https://www.youtube.com/embed/cpmycIGTOPU"
-                            title="Unity數學小遊戲設計 (Made With Unity)" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>Running Game (Mobile)</h3>
-                        <img src="assets/img (15).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>VR場景 1:1 3D建模 </h3>
-                        <img src="assets/img (13).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3> Character Modeling</h3>
-                        <iframe width="220" height="160" src="https://www.youtube.com/embed/OKYeKxc1SnM"
-                            title="Blender 3D Character Showcase - Pinko" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Blender</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Character Modeling</h3>
-                        <img src="assets/img (2).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Blender</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Yacht Imexus 28 3D建模 </h3>
-                        <img src="assets/img (10).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Blender</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>Live2D Model Design & Rigging</h3>
-                        <iframe width="220" height="160" src="https://www.youtube.com/embed/pUafjMTl45k"
-                            title="How I made a Live2D Model from Photoshop Drawing to Rigging Timelapse (Speedx20) - Lion Bot"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Live2D</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Live2D Model Rigging</h3>
-                        <iframe width="220" height="160" src="https://www.youtube.com/embed/xYCTKAKm5pk"
-                            title="#worklog | #Live2D - Neko (Physics Part)" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Live2D</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>Product & UIUX Design</h3>
-                        <img src="assets/img (1).avif" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Figma</span>
-                        </div>
-                    </div>
-
-
-                    <div class="project-card">
-                        <h3>2D Motion Graphics</h3>
-                        <iframe width="220" height="160" src="https://www.youtube.com/embed/P0xvRLPLlgk"
-                            title="Motion Graphic &quot;Happy Lunar New Year&quot;" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> After Effect</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>音效製作 1</h3>
-                        <iframe width="220" height="160" src="https://www.youtube.com/embed/K3W4yoJ_4w0"
-                            title="🎵Cute Ringtone🎵" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> FL Studio</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>音效製作 2</h3>
-                        <iframe width="220" height="160" src="https://www.youtube.com/embed/LH0Rveh4d3w"
-                            title="🎵Cute Ringtone 2🎵" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> FL Studio</span>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <br>
-                <br>
-
-                <div class="section-header">
-                    <h2><i class="fas fa-code-branch"></i> 參與項目</h2>
-                </div>
-
-                <br>
-
-
-                <div class="project-grid">
-
-                    <div class="project-card">
-                        <h3>Playground for VTuber</h3>
-                        <iframe width="220" height="120" src="https://www.youtube.com/embed/gdokUgsQRjM"
-                            title="Playground for VTuber - Filter Function DEMO" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <p> @Avatech
-                        </p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Webapp</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Playground for Streamer</h3>
-                        <iframe width="220" height="120" src="https://www.youtube.com/embed/7GjG8_8tdhY"
-                            title="avatech playground v0.4.0 flow testing" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <p> @Avatech
-                        </p>
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Heart Sutra Game</h3>
-                        <iframe width="220" height="120" src="https://www.youtube.com/embed/asCp1cPjLAk"
-                            title="Heart Sutra in Game 心經填字遊戲👌 (Made With Unity)" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        <p> “Bach is Heart Sutra” Exhibition at Hong Kong Cultural Centre Grand Theatre (9–14/11/2020).
-                        </p>
-                        <div class="project-tech" style="margin-top:0px ;margin-bottom: 0px;">
-                            <span> DFA Design Awards 2021</span>
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>桌遊製作 Meowpoly</h3>
-                        <img src="assets/img (14).png" alt="img" class="img">
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Adventure Team (Multiplayer)</h3>
-                        <img src="assets/img (9).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <h3>Tetris</h3>
-                        <img src="assets/img (16).png" alt="img" class="img">
-                        <div class="project-tech" style="margin-top:10px ;margin-bottom: 0px;">
-                            <span> Unity</span>
-                        </div>
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- 工作經歷/AI -->
-            <section id="exp" class="section">
-                <div class="section-header">
-
-                    <h2><i class="fas fa-briefcase"></i> 工作經歷與技能點</h2>
-                    <br>
-                    <div class="ai-grid">
-
-                        <div class="ai-card">
-                            <h4>社群經營/內容撰寫</h4>
-                            <p>熟悉Discord, 社交媒體平台, 針對目標客戶設計內容提升SEO </p>
-                            <div class="ai-level">
-                                <div class="level-dots">
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot "></span>
-                                    <span class="dot "></span>
-                                </div>
-                                <span>中階</span>
-                            </div>
-                        </div>
-
-                        <div class="ai-card">
-                            <h4>設計和開發</h4>
-                            <p>Unity 認證遊戲開發者, 前端開發 (JS,React), Discord Bot, ComfyUI Custom Node, Chrome Extension,
-                                獨立完成多個項目</p>
-                            <div class="ai-level">
-                                <div class="level-dots">
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot"></span>
-                                    <span class="dot"></span>
-                                </div>
-                                <span>中階</span>
-                            </div>
-                        </div>
-
-                        <div class="ai-card">
-                            <h4>媒體創作</h4>
-                            <p>商用平面設計, 基礎繪畫, 角色設計, 2D&3D建模和角色骨架綁定, 工具: Figma/ Blender/ Live2D</p>
-                            <div class="ai-level">
-                                <div class="level-dots">
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot"></span>
-                                    <span class="dot"></span>
-                                </div>
-                                <span>中階</span>
-                            </div>
-                        </div>
-
-
-                        <div class="ai-card">
-                            <h4>ComfyUI 工作流</h4>
-                            <p>作為最早期用戶使用至今, 獲多個企業信任, 提供AI生成教學, 製作內部工具和產品工作流設計 </p>
-                            <div class="ai-level">
-                                <div class="level-dots">
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                    <span class="dot filled"></span>
-                                </div>
-                                <span>熟練</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="exp-timeline">
-                    <div class="exp-item">
-                        <div class="exp-period">2024 JAN - 現在</div>
-                        <div class="exp-content">
-                            <h3>ComfyUI 工作流設計</h3>
-                            <p class="exp-company">項目接案 / 顧問合約</p>
-                            <ul>
-                                <li>企業培訓, 提供教學於設計師和工程師使用AI工具: Stable Diffusion & ComfyUI</li>
-                                <li>AI生成產品開發 ComfyUI工作流設計</li>
-                                <li>Commercial Image & Video ComfyUI Workflow Design</li>
-                                <li>Advanced ComfyUI Workflows for Game Art Generation
-                                    Pipelines</li>
-                                <li>Fine-Tuned AI Models on 1,000+ Images to Produce Brand-Aligned Avatars and Game
-                                    Assets</li>
-                                <li>Character LoRA Model Training for Customized Visual Style</li>
-                                <hr>
-                                <li> Skills: ComfyUI, Stable Diffusion, LoRA Model Traning</li>
-                            </ul>
-                        </div>
-                        <br>
-
-                        <h4>合作企業</h4>
-                        <div class="contact-options">
-                            <div class="link-card">
-                                <h4>Comfy Deploy</h4>
-                            </div>
-
-                            <div class="link-card">
-                                <h4>Mighty Bear Games</h4>
-                            </div>
-
-                            <div class="link-card">
-                                <h4>Fun Town 戲谷</h4>
-                            </div>
-
-                            <div class="link-card">
-                                <h4>Moshi Mosh AI</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="exp-item">
-                        <div class="exp-period">2021 DEC - 2023 DEC</div>
-                        <div class="exp-content">
-                            <h3>Gen AI / Tech Artist R&D / Web Front-End & Unity Developer / Content Writer</h3>
-                            <p class="exp-company">Avatech Limited</p>
-                            <ul>
-                                <li>AI Character Generation Pipelines using ComfyUI, Chatbot Prompting.</li>
-                                <li>Created Base Animation Models with Live2D and Blender for AI Character.</li>
-                                <li>Designed and Developed Web Front-End with Focus on UX/UI</li>
-                                <li>Produced Instructional Articles and Served as Media Platform Editor</li>
-                                <li>Collaborated with Artists from Hong Kong, US, Taiwan, and Japan</li>
-
-                                <hr>
-                                <li> Skills: Unity</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="exp-item">
-                        <div class="exp-period">2021 MAY - 2021 NOV</div>
-                        <div class="exp-content">
-                            <h3>Unity Developer</h3>
-                            <p class="exp-company">越‧創無限 Abound Yue 0X18F | 思達數學</p>
-                            <ul>
-                                <li> Rebuilt 50 series of mathematics teaching materials for kids (6-12) from flash
-                                    format to Unity</li>
-                                <hr>
-                                <li> Skills: Unity</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="exp-item">
-                        <div class="exp-period">2020 OCT - 2021 MAR</div>
-                        <div class="exp-content">
-                            <h3>Unity Developer</h3>
-                            <p class="exp-company">進念．二十面體 Zuni Icosahedron</p>
-                            <ul>
-                                <li> Built a game from sketch for “Bach is Heart Sutra” exhibition on Hong Kong Cultural
-                                    Centre Grand Theatre (9-14/11/2020)</li>
-                                <li> Bach is Heart Sutra (2020) is the recipient of the DFA Design for Asia Awards 2021
-                                    – Merit Award</li>
-                                <hr>
-                                <li> Skills: Unity</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="exp-item">
-                        <div class="exp-period">2019 MAR - 2020 AUG</div>
-                        <div class="exp-content">
-                            <h3>兼職設計助理</h3>
-                            <p class="exp-company">Sliver Dream Studio</p>
-                            <ul>
-                                <li>協助設計師整理素材</li>
-                                <hr>
-                                <li>Skills: Photoshop / Illustrator / InDesign</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-
-            </section>
-
-            <!-- 我的連結 -->
-            <section id="social" class="section">
-
-                <div class="section-header">
-                    <h2><i class="fas fa-network-wired"></i> 連結 / 合作聯繫</h2>
-                </div>
-
-                <div class="social-grid">
-
-                    <a href="https://ecjojo.itch.io/" class="social-card itch" target="_blank">
-                        <div class="social-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>itch.io</h3>
-                            <span class="social-handle">ecjojo</span>
-                        </div>
-                    </a>
-
-
-
-                    <a href="https://github.com/ecjojo" class="social-card github" target="_blank">
-                        <div class="social-icon">
-                            <i class="fab fa-github"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>GitHub</h3>
-
-                            <span class="social-handle">@ecjojo</span>
-                        </div>
-                    </a>
-
-                    <a href="https://linkedin.com/in/ecjojo" class="social-card linkedin" target="_blank">
-                        <div class="social-icon">
-                            <i class="fab fa-linkedin"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>LinkedIn</h3>
-                            <span class="social-handle">ecjojo</span>
-                        </div>
-                    </a>
-
-
-                    <a href="https://www.youtube.com/@ecjojodev" class="social-card youtube" target="_blank">
-                        <div class="social-icon">
-                            <i class="fab fa-youtube"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>YouTube</h3>
-                            <span class="social-handle">ecjojodev</span>
-                        </div>
-                    </a>
-
-                    <a href="https://x.com/ecjojodev" class="social-card twitter" target="_blank">
-                        <div class="social-icon">
-                            <i class="fab fa-twitter"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>X</h3>
-                            <span class="social-handle">@ecjojodev</span>
-                        </div>
-                    </a>
-
-                    <a href="https://www.facebook.com/chauyihei" class="social-card twitter" target="_blank">
-                        <div class="social-icon">
-                            <i class="fab fa-facebook"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>Facebook</h3>
-                            <span class="social-handle">@ecjojo</span>
-                        </div>
-                    </a>
-
-                    <a href="https://www.threads.com/@ecjojo" class="social-card twitter" target="_blank">
-                        <div class="social-icon">
-                            <i class="fab fa-threads"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>Threads</h3>
-                            <span class="social-handle">@ecjojo</span>
-                        </div>
-                    </a>
-
-                    <a href="https://www.instagram.com/ecjojo/" class="social-card twitter" target="_blank">
-                        <div class="social-icon">
-                            <i class="fab fa-instagram"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>Instagram</h3>
-                            <span class="social-handle">@ecjojo</span>
-                        </div>
-                    </a>
-
-                    <a href="mailto:ecjojostudio@gmail.com" class="social-card email" target="_blank">
-                        <div class="social-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="social-info">
-                            <h3>Email</h3>
-                            <span class="social-handle">ecjojostudio@gmail.com</span>
-                        </div>
-                    </a>
-                </div>
-
-
-
-
-                <br>
-                <br>
-
-
-                <div class="contact-section">
-                    <h3><i class="fas fa-comments"></i> 可合作的項目</h3>
-                    <p style="margin-top:10px ;">其他合作提議也歡迎聯繫討論</p>
-                    <div class="contact-options">
-                        <div class="contact-card">
-                            <h4>創意項目開發</h4>
-                            <p>遊戲或工具開發 / Unity / AI生成</p>
-
-                        </div>
-                        <div class="contact-card">
-                            <h4>ComfyUI 工作流</h4>
-                            <p>高品質AI圖片和影片設計 / 商用工作流設計 / ComfyDeploy API部署 / 私人或企業教學</p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-            </section>
-        </main>
-
-
+<div class="cursor" id="cursor"></div>
+
+<nav>
+  <div class="nav-logo">ECJOJO STUDIO</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#exp">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-badge">⚡ Open to Collab</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <p class="hero-tag">遊戲開發 · ComfyUI · 媒體創作 · 個人工作室</p>
+
+  <h1 class="hero-name">
+    <span>ecjojo</span>
+  </h1>
+
+  
+  <p class="hero-sub">Unity 遊戲開發 × ComfyUI 工作流設計 × AI 工具創作</p>
+  <div class="hero-stats">
+
+
+    <div class="stat">
+      <div class="stat-num">20+</div>
+      <div class="stat-label">遊戲 & 工具開發項目</div>
     </div>
-    <footer class="footer">
-        <p>© 2026 ecjojo </p>
-        <div class="footer-links">
+
+    <div class="stat">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">AI 教學文章撰寫</div>
+    </div>
+
+        <div class="stat">
+      <div class="stat-num">600+</div>
+      <div class="stat-label">多平台會員</div>
+    </div>
+
+  </div>
+  <div class="hero-ctas">
+    <a href="#works" class="btn-primary">查看作品集 →</a>
+    <a href="mailto:ecjojostudio@gmail.com" class="btn-secondary">聯繫合作</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>UNITY</span><span>·</span>
+    <span>COMFYUI</span><span>·</span>
+    <span>STABLE DIFFUSION</span><span>·</span>
+    <span>BLENDER</span><span>·</span>
+    <span>LIVE2D</span><span>·</span>
+    <span>INDIE GAME DEV</span><span>·</span>
+    <span>AI WORKFLOW</span><span>·</span>
+    <span>OPEN TO COLLAB</span><span>·</span>
+    <span>UNITY</span><span>·</span>
+    <span>COMFYUI</span><span>·</span>
+    <span>STABLE DIFFUSION</span><span>·</span>
+    <span>BLENDER</span><span>·</span>
+    <span>LIVE2D</span><span>·</span>
+    <span>INDIE GAME DEV</span><span>·</span>
+    <span>AI WORKFLOW</span><span>·</span>
+    <span>OPEN TO COLLAB</span><span>·</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <p class="section-label reveal">關於我</p>
+  <div class="about-grid reveal">
+    <div>
+      <h2 class="section-heading" style="margin-bottom:32px">ONE<br><span style="color:var(--neon)">PERSON</span><br>STUDIO.</h2>
+      <p class="about-text">
+        香港的獨立開發者 / 創作者，目前個人工作室的形式接案與創作。<br><br>
+        專注於 Unity 遊戲開發與 ComfyUI 工作流設計，同時經營 Patreon 教學內容，擁有 600+ 跨平台訂閱會員。<br><br>
+      </p>
+    </div>
+    <div class="skills-cats">
+      <div>
+        <div class="skill-cat-label">遊戲 & 開發</div>
+        <div class="skill-pills">
+          <span class="skill-pill hot">Unity / C#</span>
+          <span class="skill-pill">React / JS</span>
+          <span class="skill-pill">Discord Bot</span>
+          <span class="skill-pill">Chrome Extension</span>
 
         </div>
-    </footer>
-    <script src="script.js"></script>
-</body>
+      </div>
+      <div>
+        <div class="skill-cat-label">AI & ComfyUI</div>
+        <div class="skill-pills">
+          <span class="skill-pill hot">ComfyUI 工作流</span>
+          <span class="skill-pill">Stable Diffusion</span>
+          <span class="skill-pill hot">LoRA 模型訓練</span>
+          <span class="skill-pill">API</span>
 
+        </div>
+      </div>
+      <div>
+        <div class="skill-cat-label">媒體創作</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Blender 3D</span>
+          <span class="skill-pill">Live2D</span>
+          <span class="skill-pill">Figma</span>
+          <span class="skill-pill">After Effects</span>
+          <span class="skill-pill">FL Studio</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="section" id="works">
+  <p class="section-label reveal">作品集</p>
+  <h2 class="section-heading reveal">WORKS</h2>
+
+  <div class="works-grid reveal">
+
+    <!-- 1 Factory - tall+wide -->
+         <div class="work-card  wide tall" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+      <img class="card-img" src="https://img.itch.zone/aW1nLzIzMjA1NzE4LnBuZw==/315x250%23c/4VpYFy.png" alt="">
+      <span class="card-num">03</span>
+      <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
+      <div class="card-body">
+        <div class="card-title">Garden </div>
+        <div class="card-desc">創造你的療癒小花園</div>
+      </div>
+      <a href="https://ecjojo.itch.io/garden" class="card-link" target="_blank">↗</a>
+    </div>
+
+
+    <!-- 2 Campfire -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.05) 0%, transparent 60%)">
+      <img class="card-img" src="https://img.itch.zone/aW1nLzIzNzI5NTY3LnBuZw==/315x250%23c/jdwj0m.png" alt="">
+      <span class="card-num">02</span>
+      <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
+      <div class="card-body">
+        <div class="card-title">Campfire </div>
+        <div class="card-desc">砍柴 · 生火 · 療癒放鬆</div>
+      </div>
+      <a href="https://ecjojo.itch.io/campfire" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 3 Garden -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.05) 0%, transparent 60%)">
+      <img class="card-img" src="https://img.itch.zone/aW1nLzI0MTA3NDE3LnBuZw==/315x250%23c/OkiImS.png" alt="">
+      <span class="card-num">01</span>
+      <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
+      <div class="card-body">
+        <div class="card-title">Factory </div>
+        <div class="card-desc">打造你的自動化農場世界 · Nov 2025</div>
+      </div>
+      <a href="https://ecjojo.itch.io/factory" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 4 ComfyUI Workflows - wide -->
+    <div class="work-card wide" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.06) 0%, transparent 50%)">
+         <img class="card-img" src="/assets/03_1.jpeg" alt="">
+      <span class="card-num">03</span>
+      <span class="card-num">04</span>
+      <div class="card-tags"><span class="card-tag ai">ComfyUI</span><span class="card-tag tool">Open Source</span></div>
+      <div class="card-body">
+        <div class="card-title">ComfyUI Workflow Templates — 100 ⭐ GitHub</div>
+        <div class="card-desc">高品質 AI 工作流合集，商業授權可用</div>
+      </div>
+      <a href="https://github.com/ecjojo/ecjojo-comfyui-workflows" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 5 Magic Cat -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.05) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/05.png" alt="">
+      <span class="card-num">05</span>
+      <div class="card-tags"><span class="card-tag ai">SD</span><span class="card-tag tool">Web</span></div>
+      <div class="card-body">
+        <div class="card-title">Magic Cat</div>
+        <div class="card-desc">Stable Diffusion Prompt Clipbook + OpenPose Canvas</div>
+      </div>
+      <a href="https://magic-cat.vercel.app/" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 6 Figma OpenPose -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/06.webp" alt="">
+      <span class="card-num">06</span>
+      <div class="card-tags"><span class="card-tag tool">Figma</span></div>
+      <div class="card-body">
+        <div class="card-title">Figma OpenPose Editor</div>
+        <div class="card-desc">180 Users · AI 姿勢編輯器</div>
+      </div>
+    </div>
+
+    <!-- 7 Discord Bot Template -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/07.webp" alt="">
+      <span class="card-num">07</span>
+      <div class="card-tags"><span class="card-tag ai">ComfyUI</span><span class="card-tag tool">Bot</span></div>
+      <div class="card-body">
+        <div class="card-title">Image Gen Discord Bot</div>
+        <div class="card-desc">ComfyUI + ComfyDeploy API 開源範本</div>
+      </div>
+      <a href="https://github.com/ecjojo/DiscordBot-ComfyDeployAPI-Template" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 8 AI Crystal Ball - tall -->
+    <div class="work-card tall" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.06) 0%, transparent 50%)">
+          <img class="card-img" src="/assets/08.webp" alt="">
+      <span class="card-num">08</span>
+      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag tool">Web</span></div>
+      <div class="card-body">
+        <div class="card-title">AI Crystal Ball 水晶球占卜</div>
+        <div class="card-desc">ChatGPT + AI 圖像生成 + 語音合成</div>
+      </div>
+    </div>
+
+    <!-- 9 Toolbox -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/09.png" alt="">
+      <span class="card-num">09</span>
+      <div class="card-tags"><span class="card-tag tool">Web</span></div>
+      <div class="card-body">
+        <div class="card-title">Toolbox</div>
+        <div class="card-desc">Emoji Clipbook 工具網站</div>
+      </div>
+      <a href="https://ecjojo.github.io/toolbox/" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 10 Heart Sutra Game - wide -->
+    <div class="work-card wide" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.05) 0%, transparent 50%)">
+      <span class="card-num">10</span>
+      <div class="card-tags"><span class="card-tag game">Unity</span><span class="card-tag tool">DFA Award</span></div>
+      <div class="card-body">
+        <div class="card-title">心經即是巴哈 — DFA 亞洲設計優異獎 2021</div>
+        <div class="card-desc">香港文化中心大劇院 互動裝置展覽遊戲</div>
+      </div>
+    </div>
+
+    <!-- 11 Custom Node -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/03_1.jpeg" alt="">
+      <span class="card-num">11</span>
+      <div class="card-tags"><span class="card-tag ai">ComfyUI</span></div>
+      <div class="card-body">
+        <div class="card-title">Custom Node Template</div>
+        <div class="card-desc">ComfyUI 節點開發範本</div>
+      </div>
+      <a href="https://github.com/ecjojo/ecjojo-example-nodes" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 12 Lunar Calendar -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/12.png" alt="">
+      <span class="card-num">12</span>
+      <div class="card-tags"><span class="card-tag tool">Web</span></div>
+      <div class="card-body">
+        <div class="card-title">Lunar Calendar 農曆</div>
+        <div class="card-desc">農曆查詢網站</div>
+      </div>
+      <a href="https://eccalendar.vercel.app/" class="card-link" target="_blank">↗</a>
+    </div>
+
+    <!-- 13 AI Waifu - tall -->
+    <div class="work-card tall" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.07) 0%, transparent 50%)">
+          <img class="card-img" src="/assets/13_1.webp" alt="">
+      <span class="card-num">13</span>
+      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag ai">SD</span></div>
+      <div class="card-body">
+        <div class="card-title">AI Waifu Project</div>
+        <div class="card-desc">設計具有個性的 AI 角色 · Stable Diffusion + ChatGPT</div>
+      </div>
+    </div>
+
+    <!-- 14 AI Influencer -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.05) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/14.webp" alt="">
+      <span class="card-num">14</span>
+      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag ai">SD</span></div>
+      <div class="card-body">
+        <div class="card-title">AI Influencer Project</div>
+        <div class="card-desc">Stable Diffusion 虛擬網紅</div>
+      </div>
+    </div>
+
+    <!-- 15 English Desk -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/15.jpeg" alt="">
+      <span class="card-num">15</span>
+      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag tool">Web</span></div>
+      <div class="card-body">
+        <div class="card-title">English Desk</div>
+        <div class="card-desc">AI 英語學習工具</div>
+      </div>
+    </div>
+
+    <!-- 16 Chrome Extension -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/16.png" alt="">
+      <span class="card-num">16</span>
+      <div class="card-tags"><span class="card-tag tool">Extension</span></div>
+      <div class="card-body">
+        <div class="card-title">Vision Anything</div>
+        <div class="card-desc">Chrome Extension 開發</div>
+      </div>
+    </div>
+
+    <!-- 17 VR 場景 - wide -->
+    <div class="work-card wide" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.05) 0%, transparent 50%)">
+          <img class="card-img" src="/assets/17.png" alt="">
+      <span class="card-num">17</span>
+      <div class="card-tags"><span class="card-tag game">Unity</span><span class="card-tag tool">VR</span></div>
+      <div class="card-body">
+        <div class="card-title">VR 場景 1:1 3D 建模</div>
+        <div class="card-desc">Unity 虛擬實境場景製作</div>
+      </div>
+    </div>
+
+    <!-- 18 LoRA Training -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+      <span class="card-num">18</span>
+      <div class="card-tags"><span class="card-tag ai">AI</span></div>
+      <div class="card-body">
+        <div class="card-title">Character LoRA Training</div>
+        <div class="card-desc">1000+ 訓練素材 · 商用LoRA 模型訓練 </div>
+      </div>
+    </div>
+
+    <!-- 19  -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/19.avif" alt="">
+      <span class="card-num">19</span>
+      <div class="card-tags"><span class="card-tag tool">UIUX</span></div>
+      <div class="card-body">
+        <div class="card-title">App Design</div>
+        <div class="card-desc"></div>
+      </div>
+    </div>
+
+    <!-- 20 Yacht 3D -->
+    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
+          <img class="card-img" src="/assets/20.png" alt="">
+      <span class="card-num">20</span>
+      <div class="card-tags"><span class="card-tag tool">Blender</span></div>
+      <div class="card-body">
+        <div class="card-title">Yacht Imexus 28 3D 建模</div>
+        <div class="card-desc"> 3D 建模 · Blender</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="section" id="exp">
+  <p class="section-label reveal">工作經歷</p>
+  <h2 class="section-heading reveal" style="margin-bottom:48px">EXP.</h2>
+  <div class="timeline reveal">
+
+    <div class="timeline-item">
+      <div class="timeline-year">2024</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-org">接案 / 顧問 · 現在</div>
+        <div class="timeline-title">個人工作室 · ComfyUI工作流設計</div>
+        <div class="timeline-desc">
+          企業 AI 工具培訓、商業 ComfyUI 工作流設計、LoRA 模型訓練。<br>
+          合作企業：Comfy Deploy · Mighty Bear Games · Fun Town 戲谷 · Moshi Mosh AI
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">2021</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-org">Avatech Limited · Dec 2021–Dec 2023</div>
+        <div class="timeline-title">Gen AI / Tech Artist / Web Front-End / Unity Developer</div>
+        <div class="timeline-desc">
+          AI 角色生成流程、Live2D & Blender 基礎動作模型、前端 UX/UI 開發、媒體內容撰寫。<br>
+          跨國協作：香港、美國、台灣、日本藝術家
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">2021</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-org">越·創無限 / 思達數學 · May 2021–Nov 2021</div>
+        <div class="timeline-title">Unity Developer</div>
+        <div class="timeline-desc">將 50 套 Flash 兒童數學教材重建為 Unity 互動版本（6–12 歲）</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">2020</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-org">進念·二十面體 · Oct 2020–Mar 2021</div>
+        <div class="timeline-title">Unity Developer — 心經即是巴哈</div>
+        <div class="timeline-desc">
+          香港文化中心大劇院展覽遊戲開發。<br>
+          獲 <strong style="color:var(--neon)">DFA 亞洲設計優異獎 2021</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <p class="section-label reveal">連絡 / 合作</p>
+  <div class="links-section reveal">
+    <div>
+      <h2 class="contact-heading">
+        LET'S<br>BUILD<br><span class="neon">TOGETHER.</span>
+      </h2>
+      <p class="contact-sub">
+        遊戲開發、ComfyUI 工作流、AI 工具項目<br>
+        歡迎來信或直接聯繫討論合作可能。<br>
+        ( 通常 24 小時內回覆。 )
+        ecjojo
+      </p>
+      <div class="collab-chips">
+        <span class="collab-chip">遊戲 / 工具開發</span>
+        <span class="collab-chip">ComfyUI 工作流</span>
+        <span class="collab-chip">AI 教學</span>
+      </div>
+    </div>
+    <div class="link-list">
+      <a href="mailto:ecjojostudio@gmail.com" class="link-row">
+        <div class="link-info">
+          <div class="link-name">Email</div>
+          <div class="link-handle">ecjojostudio@gmail.com</div>
+        </div>
+        <span class="link-arr">↗</span>
+      </a>
+            <a href="https://linkedin.com/in/ecjojo" class="link-row" target="_blank">
+        <div class="link-info">
+          <div class="link-name">LinkedIn</div>
+          <div class="link-handle">ecjojo</div>
+        </div>
+        <span class="link-arr">↗</span>
+      </a>
+            <a href="https://x.com/ecjojodev" class="link-row" target="_blank">
+        <div class="link-info">
+          <div class="link-name">X / Twitter</div>
+          <div class="link-handle">@ecjojodev</div>
+        </div>
+        <span class="link-arr">↗</span>
+      </a>
+      <a href="https://ecjojo.itch.io/" class="link-row" target="_blank">
+        <div class="link-info">
+          <div class="link-name">itch.io</div>
+          <div class="link-handle">遊戲作品</div>
+        </div>
+        <span class="link-arr">↗</span>
+      </a>
+      <a href="https://www.patreon.com/ecjojo" class="link-row" target="_blank">
+        <div class="link-info">
+          <div class="link-name">Patreon</div>
+          <div class="link-handle">ComfyUI 教學 · 300 會員</div>
+        </div>
+        <span class="link-arr">↗</span>
+      </a>
+      <a href="https://www.youtube.com/@ecjojodev" class="link-row" target="_blank">
+        <div class="link-info">
+          <div class="link-name">YouTube</div>
+          <div class="link-handle">@ecjojodev · 500K+ views</div>
+        </div>
+        <span class="link-arr">↗</span>
+      </a>
+
+
+            <a href="https://github.com/ecjojo" class="link-row" target="_blank">
+        <div class="link-info">
+          <div class="link-name">GitHub</div>
+          <div class="link-handle">@ecjojo</div>
+        </div>
+        <span class="link-arr">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 · Hong Kong</span>
+  <span style="color:var(--neon)">⚡ ECJOJO STUDIO</span>
+  <span><a href="https://discord.gg/2uFuM9UjEJ">Discord 社群</a></span>
+</footer>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .work-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { setTimeout(() => e.target.classList.add('in'), 60); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Fix stats typo (duplicated stat)
+document.querySelectorAll('.stat').forEach((s, i) => {
+  if (i === 1) {
+    const nums = s.querySelectorAll('.stat-num');
+    if (nums.length > 1) nums[0].remove();
+    // find extra empty stat-num
+    s.querySelectorAll('.stat-num').forEach((n, j) => { if(j>0) n.remove(); });
+  }
+});
+</script>
+</body>
 </html>

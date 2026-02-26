@@ -1,1097 +1,1381 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@ecjojo — 遊戲開發 × ComfyUI × 媒體創作</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #080b10;
-  --surface: #0d1117;
-  --s2: #12181f;
-  --neon: #00ffe0;
-  --lime: #b8ff00;
-  --pink: #ff2d78;
-  --orange: #ff6b00;
-  --white: #eef2f7;
-  --muted: #4a5568;
-  --border: #1a2030;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: 'Space Mono', monospace;
-  overflow-x: hidden;
-  cursor: none;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@ecjojo — 遊戲開發 × ComfyUI × 媒體創作</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;700;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080b10;
+      --surface: #0d1117;
+      --s2: #12181f;
+      --neon: #00ffe0;
+      --lime: #b8ff00;
+      --pink: #ff2d78;
+      --orange: #ff6b00;
+      --white: #eef2f7;
+      --muted: #4a5568;
+      --border: #1a2030;
+    }
 
-/* CURSOR */
-.cursor {
-  width: 10px; height: 10px;
-  background: var(--neon);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background 0.2s;
-  mix-blend-mode: screen;
-}
-.cursor.big { width: 44px; height: 44px; background: var(--pink); }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* SCAN LINE */
-body::after {
-  content:'';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,224,0.012) 2px, rgba(0,255,224,0.012) 4px);
-  pointer-events: none;
-  z-index: 1000;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 18px 40px;
-  z-index: 500;
-  background: linear-gradient(to bottom, rgba(8,11,16,0.97), transparent);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
-  letter-spacing: 4px;
-  color: var(--neon);
-  text-shadow: 0 0 20px rgba(0,255,224,0.5);
-}
-.nav-links { display: flex; gap: 28px; list-style: none; }
-.nav-links a {
-  color: var(--white);
-  text-decoration: none;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  opacity: 0.5;
-  transition: opacity 0.2s, color 0.2s;
-}
-.nav-links a:hover { opacity: 1; color: var(--neon); }
-.nav-badge {
-  background: var(--pink);
-  color: white;
-  font-size: 9px;
-  letter-spacing: 1px;
-  padding: 4px 10px;
-  text-transform: uppercase;
-  animation: pulse-badge 2s infinite;
-}
-@keyframes pulse-badge { 0%,100%{opacity:1} 50%{opacity:0.7} }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 120px 40px 80px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,255,224,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,224,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
-}
-.hero-glow {
-  position: absolute;
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(0,255,224,0.07) 0%, transparent 70%);
-  top: 10%; left: -10%;
-  pointer-events: none;
-}
-.hero-glow2 {
-  position: absolute;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(255,45,120,0.05) 0%, transparent 70%);
-  bottom: 10%; right: 5%;
-  pointer-events: none;
-}
-.hero-tag {
-  font-size: 10px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--neon);
-  margin-bottom: 20px;
-  opacity: 0;
-  animation: fadeUp 0.6s 0.2s forwards;
-}
-.hero-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(72px, 12vw, 180px);
-  line-height: 0.88;
-  letter-spacing: 2px;
-  color: var(--white);
-  opacity: 0;
-  animation: fadeUp 0.8s 0.4s forwards;
-}
-.hero-name .neon { color: var(--neon); text-shadow: 0 0 40px rgba(0,255,224,0.4); }
-.hero-name .pink { color: var(--pink); text-shadow: 0 0 40px rgba(255,45,120,0.4); }
-.hero-sub {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 13px;
-  color: rgba(238,242,247,0.55);
-  margin-top: 24px;
-  letter-spacing: 1px;
-  opacity: 0;
-  animation: fadeUp 0.7s 0.65s forwards;
-}
-.hero-stats {
-  display: flex;
-  gap: 40px;
-  margin-top: 48px;
-  opacity: 0;
-  animation: fadeUp 0.7s 0.85s forwards;
-}
-.stat { text-align: left; }
-.stat-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 42px;
-  color: var(--neon);
-  line-height: 1;
-}
-.stat-label {
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 4px;
-}
-.hero-ctas {
-  display: flex;
-  gap: 16px;
-  margin-top: 48px;
-  opacity: 0;
-  animation: fadeUp 0.7s 1s forwards;
-}
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: var(--neon);
-  color: var(--bg);
-  padding: 14px 28px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 2px; text-transform: uppercase;
-  text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 3px 3px 0 var(--pink); }
-.btn-secondary {
-  display: inline-flex; align-items: center; gap: 10px;
-  border: 1px solid var(--neon);
-  color: var(--neon);
-  padding: 14px 28px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 2px; text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-}
-.btn-secondary:hover { background: rgba(0,255,224,0.08); }
+    /* CURSOR */
+    .cursor {
+      width: 10px;
+      height: 10px;
+      background: var(--neon);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: screen;
+    }
 
-@keyframes fadeUp {
-  from { opacity:0; transform: translateY(24px); }
-  to   { opacity:1; transform: translateY(0); }
-}
+    .cursor.big {
+      width: 44px;
+      height: 44px;
+      background: var(--pink);
+    }
 
-/* MARQUEE */
-.marquee-wrap {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--neon);
-  padding: 9px 0;
-  overflow: hidden;
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 22s linear infinite;
-}
-.marquee-track span {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 16px;
-  letter-spacing: 3px;
-  color: var(--bg);
-  padding: 0 28px;
-  white-space: nowrap;
-}
-@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    /* SCAN LINE */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 224, 0.012) 2px, rgba(0, 255, 224, 0.012) 4px);
+      pointer-events: none;
+      z-index: 1000;
+    }
 
-/* SECTIONS */
-.section { padding: 90px 40px; border-top: 1px solid var(--border); }
-.section-label {
-  font-size: 9px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--neon);
-  margin-bottom: 14px;
-}
-.section-heading {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(48px, 8vw, 110px);
-  letter-spacing: 1px;
-  line-height: 0.95;
-  margin-bottom: 60px;
-}
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      z-index: 500;
+      background: linear-gradient(to bottom, rgba(8, 11, 16, 0.97), transparent);
+      border-bottom: 1px solid var(--border);
+    }
 
-/* ABOUT */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 80px;
-  align-items: start;
-}
-.about-text {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 14px;
-  line-height: 2;
-  color: rgba(238,242,247,0.65);
-  margin-bottom: 36px;
-}
-.skills-cats { display: flex; flex-direction: column; gap: 20px; }
-.skill-cat-label {
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.skill-pill {
-  border: 1px solid var(--border);
-  padding: 6px 14px;
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--muted);
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
-  font-family: 'Space Mono', monospace;
-}
-.skill-pill:hover { border-color: var(--neon); color: var(--neon); background: rgba(0,255,224,0.04); }
-.skill-pill.hot { border-color: rgba(0,255,224,0.3); color: var(--neon); }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 4px;
+      color: var(--neon);
+      text-shadow: 0 0 20px rgba(0, 255, 224, 0.5);
+    }
 
-/* TIMELINE */
-.timeline { display: flex; flex-direction: column; gap: 0; }
-.timeline-item {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 32px;
-  padding: 28px 0;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-}
-.timeline-item:last-child { border-bottom: none; }
-.timeline-year {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px;
-  color: var(--border);
-  line-height: 1;
-  padding-top: 2px;
-}
-.timeline-dot {
-  position: absolute;
-  left: 108px;
-  top: 36px;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--neon);
-  box-shadow: 0 0 10px var(--neon);
-}
-.timeline-content {}
-.timeline-title {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: var(--white);
-}
-.timeline-org {
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--neon);
-  margin-bottom: 10px;
-}
-.timeline-desc {
-  font-size: 12px;
-  line-height: 1.9;
-  color: rgba(238,242,247,0.5);
-  font-family: 'Noto Sans TC', sans-serif;
-}
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
 
-/* WORKS GRID */
-.works-filter {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
-.filter-btn {
-  padding: 8px 18px;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  background: none;
-  color: var(--muted);
-  cursor: none;
-  transition: all 0.2s;
-  font-family: 'Space Mono', monospace;
-}
-.filter-btn:hover, .filter-btn.active {
-  border-color: var(--neon);
-  color: var(--neon);
-  background: rgba(0,255,224,0.04);
-}
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.5;
+      transition: opacity 0.2s, color 0.2s;
+    }
 
-.works-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 210px;
-  gap: 2px;
-}
-.work-card {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  cursor: none;
-  transition: border-color 0.3s;
-}
-.work-card:hover { border-color: rgba(0,255,224,0.3); }
-.work-card.wide  { grid-column: span 2; }
-.work-card.tall  { grid-row: span 2; }
-.work-card.wide.tall { grid-column: span 2; grid-row: span 2; }
+    .nav-links a:hover {
+      opacity: 1;
+      color: var(--neon);
+    }
 
-/* card bg accent */
-.work-card::before {
-  content:'';
-  position: absolute;
-  inset: 0;
-  background: var(--card-accent, linear-gradient(135deg, transparent 60%, rgba(0,255,224,0.04)));
-  transition: opacity 0.3s;
-}
-.work-card:hover::before { opacity: 1.5; }
+    .nav-badge {
+      background: var(--pink);
+      color: white;
+      font-size: 9px;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      text-transform: uppercase;
+      animation: pulse-badge 2s infinite;
+    }
 
-.card-img {
-  position: absolute;
-  inset: 0;
-  object-fit: cover;
-  width: 100%; height: 100%;
-  opacity: 0.2;
-  transition: opacity 0.4s, transform 0.5s;
-  filter: saturate(0);
-}
-.work-card:hover .card-img { opacity: 0.35; transform: scale(1.05); filter: saturate(0.5); }
+    @keyframes pulse-badge {
 
-.card-num {
-  position: absolute;
-  top: 16px; left: 18px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--muted);
-  z-index: 2;
-}
-.card-tags {
-  position: absolute;
-  top: 14px; right: 14px;
-  display: flex; gap: 4px;
-  z-index: 2;
-}
-.card-tag {
-  font-size: 8px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  background: rgba(0,0,0,0.6);
-  border: 1px solid var(--border);
-  color: var(--muted);
-}
-.card-tag.game { border-color: rgba(184,255,0,0.3); color: var(--lime); }
-.card-tag.ai   { border-color: rgba(0,255,224,0.3); color: var(--neon); }
-.card-tag.tool { border-color: rgba(255,107,0,0.3); color: var(--orange); }
-.card-tag.new  { border-color: rgba(255,45,120,0.4); color: var(--pink); background: rgba(255,45,120,0.08); }
+      0%,
+      100% {
+        opacity: 1
+      }
 
-.card-body {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 20px 18px;
-  background: linear-gradient(to top, rgba(8,11,16,0.95) 60%, transparent);
-  z-index: 2;
-}
-.card-title {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 4px;
-  transition: color 0.2s;
-}
-.work-card:hover .card-title { color: var(--neon); }
-.work-card.wide.tall .card-title, .work-card.wide .card-title { font-size: 18px; }
-.card-desc {
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.5px;
-  font-family: 'Noto Sans TC', sans-serif;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s;
-}
-.work-card:hover .card-desc { max-height: 60px; }
-.card-link {
-  position: absolute;
-  bottom: 18px; right: 16px;
-  width: 30px; height: 30px;
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px;
-  z-index: 3;
-  opacity: 0;
-  transform: scale(0.7) rotate(-45deg);
-  transition: opacity 0.3s, transform 0.3s, background 0.2s;
-  text-decoration: none;
-  color: var(--bg);
-}
-.work-card:hover .card-link {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
-  background: var(--neon);
-  border-color: var(--neon);
-}
+      50% {
+        opacity: 0.7
+      }
+    }
 
-/* LINKS */
-.links-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: start;
-}
-.contact-heading {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(52px, 7vw, 100px);
-  line-height: 0.92;
-  letter-spacing: 1px;
-}
-.contact-heading .neon { color: var(--neon); text-shadow: 0 0 30px rgba(0,255,224,0.35); }
-.contact-sub {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 13px;
-  color: rgba(238,242,247,0.45);
-  margin-top: 20px;
-  line-height: 1.9;
-}
-.collab-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
-.collab-chip {
-  border: 1px solid rgba(0,255,224,0.2);
-  color: var(--neon);
-  font-size: 10px;
-  letter-spacing: 1px;
-  padding: 6px 14px;
-  font-family: 'Space Mono', monospace;
-}
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 40px 80px;
+      position: relative;
+      overflow: hidden;
+    }
 
-.link-list { display: flex; flex-direction: column; }
-.link-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border);
-  text-decoration: none;
-  color: var(--white);
-  position: relative;
-  overflow: hidden;
-  transition: color 0.3s;
-}
-.link-row::before {
-  content:'';
-  position: absolute;
-  left: -100%; top: 0; bottom: 0; width: 100%;
-  background: var(--neon);
-  transition: left 0.35s cubic-bezier(0.77,0,0.18,1);
-  z-index: 0;
-}
-.link-row:hover::before { left: 0; }
-.link-row:hover { color: var(--bg); }
-.link-row > * { position: relative; z-index: 1; }
-.link-info {}
-.link-name {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-}
-.link-handle {
-  font-size: 10px;
-  letter-spacing: 1px;
-  opacity: 0.5;
-  margin-top: 2px;
-}
-.link-row:hover .link-handle { opacity: 0.6; }
-.link-arr { font-size: 18px; }
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 255, 224, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 224, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+    }
 
-/* FOOTER */
-footer {
-  padding: 28px 40px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--muted);
-}
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--neon); }
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 255, 224, 0.07) 0%, transparent 70%);
+      top: 10%;
+      left: -10%;
+      pointer-events: none;
+    }
 
-/* SCROLL REVEAL */
-.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s, transform 0.7s; }
-.reveal.in { opacity: 1; transform: translateY(0); }
-</style>
+    .hero-glow2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 45, 120, 0.05) 0%, transparent 70%);
+      bottom: 10%;
+      right: 5%;
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 12vw, 180px);
+      line-height: 0.88;
+      letter-spacing: 2px;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-name .neon {
+      color: var(--neon);
+      text-shadow: 0 0 40px rgba(0, 255, 224, 0.4);
+    }
+
+    .hero-name .pink {
+      color: var(--pink);
+      text-shadow: 0 0 40px rgba(255, 45, 120, 0.4);
+    }
+
+    .hero-sub {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 13px;
+      color: rgba(238, 242, 247, 0.55);
+      margin-top: 24px;
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s forwards;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.85s forwards;
+    }
+
+    .stat {
+      text-align: left;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      color: var(--neon);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      margin-top: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s 1s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--neon);
+      color: var(--bg);
+      padding: 14px 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 3px 3px 0 var(--pink);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--neon);
+      color: var(--neon);
+      padding: 14px 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 255, 224, 0.08);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--neon);
+      padding: 9px 0;
+      overflow: hidden;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 22s linear infinite;
+    }
+
+    .marquee-track span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: var(--bg);
+      padding: 0 28px;
+      white-space: nowrap;
+    }
+
+    @keyframes marquee {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 90px 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 14px;
+    }
+
+    .section-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 110px);
+      letter-spacing: 1px;
+      line-height: 0.95;
+      margin-bottom: 60px;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      line-height: 2;
+      color: rgba(238, 242, 247, 0.65);
+      margin-bottom: 36px;
+    }
+
+    .skills-cats {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .skill-cat-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .skill-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-pill {
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .skill-pill:hover {
+      border-color: var(--neon);
+      color: var(--neon);
+      background: rgba(0, 255, 224, 0.04);
+    }
+
+    .skill-pill.hot {
+      border-color: rgba(0, 255, 224, 0.3);
+      color: var(--neon);
+    }
+
+    /* TIMELINE */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 32px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .timeline-item:last-child {
+      border-bottom: none;
+    }
+
+    .timeline-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      color: var(--border);
+      line-height: 1;
+      padding-top: 2px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 108px;
+      top: 36px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 10px var(--neon);
+    }
+
+    .timeline-content {}
+
+    .timeline-title {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--white);
+    }
+
+    .timeline-org {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 10px;
+    }
+
+    .timeline-desc {
+      font-size: 12px;
+      line-height: 1.9;
+      color: rgba(238, 242, 247, 0.5);
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+
+    /* WORKS GRID */
+    .works-filter {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--muted);
+      cursor: none;
+      transition: all 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--neon);
+      color: var(--neon);
+      background: rgba(0, 255, 224, 0.04);
+    }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 210px;
+      gap: 2px;
+    }
+
+    .work-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: none;
+      transition: border-color 0.3s;
+    }
+
+    .work-card:hover {
+      border-color: rgba(0, 255, 224, 0.3);
+    }
+
+    .work-card.wide {
+      grid-column: span 2;
+    }
+
+    .work-card.tall {
+      grid-row: span 2;
+    }
+
+    .work-card.wide.tall {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    /* card bg accent */
+    .work-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--card-accent, linear-gradient(135deg, transparent 60%, rgba(0, 255, 224, 0.04)));
+      transition: opacity 0.3s;
+    }
+
+    .work-card:hover::before {
+      opacity: 1.5;
+    }
+
+    .card-img {
+      position: absolute;
+      inset: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      opacity: 0.2;
+      transition: opacity 0.4s, transform 0.5s;
+      filter: saturate(0);
+    }
+
+    .work-card:hover .card-img {
+      opacity: 0.35;
+      transform: scale(1.05);
+      filter: saturate(0.5);
+    }
+
+    .card-num {
+      position: absolute;
+      top: 16px;
+      left: 18px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      z-index: 2;
+    }
+
+    .card-tags {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      gap: 4px;
+      z-index: 2;
+    }
+
+    .card-tag {
+      font-size: 8px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .card-tag.game {
+      border-color: rgba(184, 255, 0, 0.3);
+      color: var(--lime);
+    }
+
+    .card-tag.ai {
+      border-color: rgba(0, 255, 224, 0.3);
+      color: var(--neon);
+    }
+
+    .card-tag.tool {
+      border-color: rgba(255, 107, 0, 0.3);
+      color: var(--orange);
+    }
+
+    .card-tag.new {
+      border-color: rgba(255, 45, 120, 0.4);
+      color: var(--pink);
+      background: rgba(255, 45, 120, 0.08);
+    }
+
+    .card-body {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 18px;
+      background: linear-gradient(to top, rgba(8, 11, 16, 0.95) 60%, transparent);
+      z-index: 2;
+    }
+
+    .card-title {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      transition: color 0.2s;
+    }
+
+    .work-card:hover .card-title {
+      color: var(--neon);
+    }
+
+    .work-card.wide.tall .card-title,
+    .work-card.wide .card-title {
+      font-size: 18px;
+    }
+
+    .card-desc {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      font-family: 'Noto Sans TC', sans-serif;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s;
+    }
+
+    .work-card:hover .card-desc {
+      max-height: 60px;
+    }
+
+    .card-link {
+      position: absolute;
+      bottom: 18px;
+      right: 16px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      z-index: 3;
+      opacity: 0;
+      transform: scale(0.7) rotate(-45deg);
+      transition: opacity 0.3s, transform 0.3s, background 0.2s;
+      text-decoration: none;
+      color: var(--bg);
+    }
+
+    .work-card:hover .card-link {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+      background: var(--neon);
+      border-color: var(--neon);
+    }
+
+    /* LINKS */
+    .links-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 7vw, 100px);
+      line-height: 0.92;
+      letter-spacing: 1px;
+    }
+
+    .contact-heading .neon {
+      color: var(--neon);
+      text-shadow: 0 0 30px rgba(0, 255, 224, 0.35);
+    }
+
+    .contact-sub {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 13px;
+      color: rgba(238, 242, 247, 0.45);
+      margin-top: 20px;
+      line-height: 1.9;
+    }
+
+    .collab-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .collab-chip {
+      border: 1px solid rgba(0, 255, 224, 0.2);
+      color: var(--neon);
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .link-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .link-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s;
+    }
+
+    .link-row::before {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      background: var(--neon);
+      transition: left 0.35s cubic-bezier(0.77, 0, 0.18, 1);
+      z-index: 0;
+    }
+
+    .link-row:hover::before {
+      left: 0;
+    }
+
+    .link-row:hover {
+      color: var(--bg);
+    }
+
+    .link-row>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .link-info {}
+
+    .link-name {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .link-handle {
+      font-size: 10px;
+      letter-spacing: 1px;
+      opacity: 0.5;
+      margin-top: 2px;
+    }
+
+    .link-row:hover .link-handle {
+      opacity: 0.6;
+    }
+
+    .link-arr {
+      font-size: 18px;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 28px 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--neon);
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="cursor" id="cursor"></div>
+  <div class="cursor" id="cursor"></div>
 
-<nav>
-  <div class="nav-logo">ECJOJO STUDIO</div>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#works">Works</a></li>
-    <li><a href="#exp">Experience</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-badge">⚡ Open to Collab</div>
-</nav>
+  <nav>
+    <div class="nav-logo">ECJOJO STUDIO</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#works">Works</a></li>
+      <li><a href="#exp">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-badge">⚡ Open to Collab</div>
+  </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-grid-bg"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
-  <p class="hero-tag">遊戲開發 · ComfyUI · 媒體創作 · 個人工作室</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <p class="hero-tag">遊戲開發 · ComfyUI · 媒體創作 · 個人工作室</p>
 
-  <h1 class="hero-name">
-    <span>ecjojo</span>
-  </h1>
-
-  
-  <p class="hero-sub">Unity 遊戲開發 × ComfyUI 工作流設計 × AI 工具創作</p>
-  <div class="hero-stats">
+    <h1 class="hero-name">
+      <span>ecjojo</span>
+    </h1>
 
 
-    <div class="stat">
-      <div class="stat-num">20+</div>
-      <div class="stat-label">遊戲 & 工具開發項目</div>
+    <p class="hero-sub">Unity 遊戲開發 × ComfyUI 工作流設計 × AI 工具創作</p>
+    <div class="hero-stats">
+
+
+      <div class="stat">
+        <div class="stat-num">30+</div>
+        <div class="stat-label">遊戲 & 工具開發項目</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">AI 技術教學文章發布</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">學生/訂閱人數</div>
+      </div>
+
+
+
     </div>
-
-    <div class="stat">
-      <div class="stat-num">50+</div>
-      <div class="stat-label">AI 教學文章撰寫</div>
+    <div class="hero-ctas">
+      <a href="#works" class="btn-primary">查看作品集 →</a>
+      <a href="mailto:ecjojostudio@gmail.com" class="btn-secondary">聯繫合作</a>
     </div>
+  </section>
 
-        <div class="stat">
-      <div class="stat-num">600+</div>
-      <div class="stat-label">多平台會員</div>
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>UNITY</span><span>·</span>
+      <span>COMFYUI</span><span>·</span>
+      <span>STABLE DIFFUSION</span><span>·</span>
+      <span>BLENDER</span><span>·</span>
+      <span>LIVE2D</span><span>·</span>
+      <span>INDIE GAME DEV</span><span>·</span>
+      <span>AI WORKFLOW</span><span>·</span>
+      <span>OPEN TO COLLAB</span><span>·</span>
+      <span>UNITY</span><span>·</span>
+      <span>COMFYUI</span><span>·</span>
+      <span>STABLE DIFFUSION</span><span>·</span>
+      <span>BLENDER</span><span>·</span>
+      <span>LIVE2D</span><span>·</span>
+      <span>INDIE GAME DEV</span><span>·</span>
+      <span>AI WORKFLOW</span><span>·</span>
+      <span>OPEN TO COLLAB</span><span>·</span>
     </div>
-
   </div>
-  <div class="hero-ctas">
-    <a href="#works" class="btn-primary">查看作品集 →</a>
-    <a href="mailto:ecjojostudio@gmail.com" class="btn-secondary">聯繫合作</a>
-  </div>
-</section>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <span>UNITY</span><span>·</span>
-    <span>COMFYUI</span><span>·</span>
-    <span>STABLE DIFFUSION</span><span>·</span>
-    <span>BLENDER</span><span>·</span>
-    <span>LIVE2D</span><span>·</span>
-    <span>INDIE GAME DEV</span><span>·</span>
-    <span>AI WORKFLOW</span><span>·</span>
-    <span>OPEN TO COLLAB</span><span>·</span>
-    <span>UNITY</span><span>·</span>
-    <span>COMFYUI</span><span>·</span>
-    <span>STABLE DIFFUSION</span><span>·</span>
-    <span>BLENDER</span><span>·</span>
-    <span>LIVE2D</span><span>·</span>
-    <span>INDIE GAME DEV</span><span>·</span>
-    <span>AI WORKFLOW</span><span>·</span>
-    <span>OPEN TO COLLAB</span><span>·</span>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<section class="section" id="about">
-  <p class="section-label reveal">關於我</p>
-  <div class="about-grid reveal">
-    <div>
-      <h2 class="section-heading" style="margin-bottom:32px">ONE<br><span style="color:var(--neon)">PERSON</span><br>STUDIO.</h2>
-      <p class="about-text">
-        香港的獨立開發者 / 創作者，目前個人工作室的形式接案與創作。<br><br>
-        專注於 Unity 遊戲開發與 ComfyUI 工作流設計，同時經營 Patreon 教學內容，擁有 600+ 跨平台訂閱會員。<br><br>
-      </p>
-    </div>
-    <div class="skills-cats">
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <p class="section-label reveal">關於我</p>
+    <div class="about-grid reveal">
       <div>
-        <div class="skill-cat-label">遊戲 & 開發</div>
-        <div class="skill-pills">
-          <span class="skill-pill hot">Unity / C#</span>
-          <span class="skill-pill">React / JS</span>
-          <span class="skill-pill">Discord Bot</span>
-          <span class="skill-pill">Chrome Extension</span>
+        <h2 class="section-heading" style="margin-bottom:32px">ONE<br><span
+            style="color:var(--neon)">PERSON</span><br>STUDIO.</h2>
+        <p class="about-text">
+          香港的獨立開發者 / 創作者，目前個人工作室的形式接案與創作。<br><br>
+          專注於 Unity 遊戲開發與 ComfyUI 工作流設計，同時經營 Patreon 教學內容，擁有 600+ 跨平台訂閱會員。<br><br>
+        </p>
+      </div>
+      <div class="skills-cats">
 
+        <div>
+          <div class="skill-cat-label">AI 生成 & ComfyUI</div>
+          <div class="skill-pills">
+            <span class="skill-pill">商用影片/圖片生成</span>
+            <span class="skill-pill ">商用ComfyUI 工作流設計</span>
+            <span class="skill-pill">AI 生成工具教學 </span>
+            <span class="skill-pill">Prompting</span>
+            <span class="skill-pill">環境安裝</span>
+            <span class="skill-pill">ComfyUI Workflow API Deploy</span>
+            <span class="skill-pill">Stable Diffusion</span>
+            <span class="skill-pill ">LoRA 模型訓練</span>
+            <span class="skill-pill">Runpod Setup</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-cat-label">遊戲 & 開發</div>
+          <div class="skill-pills">
+            <span class="skill-pill ">Unity / C#</span>
+            <span class="skill-pill">React / JS</span>
+            <span class="skill-pill">Discord Bot</span>
+            <span class="skill-pill">Chrome Extension</span>
+
+          </div>
+        </div>
+
+        <div>
+          <div class="skill-cat-label">媒體創作</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Blender 3D</span>
+            <span class="skill-pill">Live2D</span>
+            <span class="skill-pill">Figma</span>
+            <span class="skill-pill">After Effects</span>
+            <span class="skill-pill">FL Studio</span>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- WORKS -->
+  <section class="section" id="works">
+    <p class="section-label reveal">作品集</p>
+    <h2 class="section-heading reveal">WORKS</h2>
+    <div class="works-grid reveal">
+
+      <!-- 1 Factory - tall+wide -->
+      <div class="work-card  wide tall"
+        style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="https://img.itch.zone/aW1nLzIzMjA1NzE4LnBuZw==/315x250%23c/4VpYFy.png" alt="">
+        <span class="card-num">03</span>
+        <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
+        <div class="card-body">
+          <div class="card-title">Garden </div>
+          <div class="card-desc">創造你的療癒小花園</div>
+        </div>
+        <a href="https://ecjojo.itch.io/garden" class="card-link" target="_blank">↗</a>
+      </div>
+
+
+      <!-- 2 Campfire -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.05) 0%, transparent 60%)">
+        <img class="card-img" src="https://img.itch.zone/aW1nLzIzNzI5NTY3LnBuZw==/315x250%23c/jdwj0m.png" alt="">
+        <span class="card-num">02</span>
+        <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
+        <div class="card-body">
+          <div class="card-title">Campfire </div>
+          <div class="card-desc">砍柴 · 生火 · 療癒放鬆</div>
+        </div>
+        <a href="https://ecjojo.itch.io/campfire" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 3 Garden -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.05) 0%, transparent 60%)">
+        <img class="card-img" src="https://img.itch.zone/aW1nLzI0MTA3NDE3LnBuZw==/315x250%23c/OkiImS.png" alt="">
+        <span class="card-num">01</span>
+        <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
+        <div class="card-body">
+          <div class="card-title">Factory </div>
+          <div class="card-desc">打造你的自動化農場世界 · Nov 2025</div>
+        </div>
+        <a href="https://ecjojo.itch.io/factory" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 4 ComfyUI Workflows - wide -->
+      <div class="work-card wide"
+        style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.06) 0%, transparent 50%)">
+        <img class="card-img" src="/assets/03_1.jpeg" alt="">
+        <span class="card-num">03</span>
+        <span class="card-num">04</span>
+        <div class="card-tags"><span class="card-tag ai">ComfyUI</span><span class="card-tag tool">Open Source</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">ComfyUI Workflow Templates — 100 ⭐ GitHub</div>
+          <div class="card-desc">高品質 AI 工作流合集，商業授權可用</div>
+        </div>
+        <a href="https://github.com/ecjojo/ecjojo-comfyui-workflows" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 5 Magic Cat -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.05) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/05.png" alt="">
+        <span class="card-num">05</span>
+        <div class="card-tags"><span class="card-tag ai">SD</span><span class="card-tag tool">Web</span></div>
+        <div class="card-body">
+          <div class="card-title">Magic Cat</div>
+          <div class="card-desc">Stable Diffusion Prompt Clipbook + OpenPose Canvas</div>
+        </div>
+        <a href="https://magic-cat.vercel.app/" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 6 Figma OpenPose -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/06.webp" alt="">
+        <span class="card-num">06</span>
+        <div class="card-tags"><span class="card-tag tool">Figma</span></div>
+        <div class="card-body">
+          <div class="card-title">Figma OpenPose Editor</div>
+          <div class="card-desc">180 Users · AI 姿勢編輯器</div>
+        </div>
+      </div>
+
+      <!-- 7 Discord Bot Template -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/07.webp" alt="">
+        <span class="card-num">07</span>
+        <div class="card-tags"><span class="card-tag ai">ComfyUI</span><span class="card-tag tool">Bot</span></div>
+        <div class="card-body">
+          <div class="card-title">Image Gen Discord Bot</div>
+          <div class="card-desc">ComfyUI + ComfyDeploy API 開源範本</div>
+        </div>
+        <a href="https://github.com/ecjojo/DiscordBot-ComfyDeployAPI-Template" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 8 AI Crystal Ball - tall -->
+      <div class="work-card tall"
+        style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.06) 0%, transparent 50%)">
+        <img class="card-img" src="/assets/08.webp" alt="">
+        <span class="card-num">08</span>
+        <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag tool">Web</span></div>
+        <div class="card-body">
+          <div class="card-title">AI Crystal Ball 水晶球占卜</div>
+          <div class="card-desc">ChatGPT + AI 圖像生成 + 語音合成</div>
+        </div>
+      </div>
+
+      <!-- 9 Toolbox -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/09.png" alt="">
+        <span class="card-num">09</span>
+        <div class="card-tags"><span class="card-tag tool">Web</span></div>
+        <div class="card-body">
+          <div class="card-title">Toolbox</div>
+          <div class="card-desc">Emoji Clipbook 工具網站</div>
+        </div>
+        <a href="https://ecjojo.github.io/toolbox/" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 10 Heart Sutra Game - wide -->
+      <div class="work-card wide"
+        style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.05) 0%, transparent 50%)">
+        <span class="card-num">10</span>
+        <div class="card-tags"><span class="card-tag game">Unity</span><span class="card-tag tool">DFA Award</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">心經即是巴哈 — DFA 亞洲設計優異獎 2021</div>
+          <div class="card-desc">香港文化中心大劇院 互動裝置展覽遊戲</div>
+        </div>
+      </div>
+
+      <!-- 11 Custom Node -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/03_1.jpeg" alt="">
+        <span class="card-num">11</span>
+        <div class="card-tags"><span class="card-tag ai">ComfyUI</span></div>
+        <div class="card-body">
+          <div class="card-title">Custom Node Template</div>
+          <div class="card-desc">ComfyUI 節點開發範本</div>
+        </div>
+        <a href="https://github.com/ecjojo/ecjojo-example-nodes" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 12 Lunar Calendar -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/12.png" alt="">
+        <span class="card-num">12</span>
+        <div class="card-tags"><span class="card-tag tool">Web</span></div>
+        <div class="card-body">
+          <div class="card-title">Lunar Calendar 農曆</div>
+          <div class="card-desc">農曆查詢網站</div>
+        </div>
+        <a href="https://eccalendar.vercel.app/" class="card-link" target="_blank">↗</a>
+      </div>
+
+      <!-- 13 AI Waifu - tall -->
+      <div class="work-card tall"
+        style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.07) 0%, transparent 50%)">
+        <img class="card-img" src="/assets/13_1.webp" alt="">
+        <span class="card-num">13</span>
+        <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag ai">SD</span></div>
+        <div class="card-body">
+          <div class="card-title">AI Waifu Project</div>
+          <div class="card-desc">設計具有個性的 AI 角色 · Stable Diffusion + ChatGPT</div>
+        </div>
+      </div>
+
+      <!-- 14 AI Influencer -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.05) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/14.webp" alt="">
+        <span class="card-num">14</span>
+        <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag ai">SD</span></div>
+        <div class="card-body">
+          <div class="card-title">AI Influencer Project</div>
+          <div class="card-desc">Stable Diffusion 虛擬網紅</div>
+        </div>
+      </div>
+
+      <!-- 15 English Desk -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/15.jpeg" alt="">
+        <span class="card-num">15</span>
+        <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag tool">Web</span></div>
+        <div class="card-body">
+          <div class="card-title">English Desk</div>
+          <div class="card-desc">AI 英語學習工具</div>
+        </div>
+      </div>
+
+      <!-- 16 Chrome Extension -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/16.png" alt="">
+        <span class="card-num">16</span>
+        <div class="card-tags"><span class="card-tag tool">Extension</span></div>
+        <div class="card-body">
+          <div class="card-title">Vision Anything</div>
+          <div class="card-desc">Chrome Extension 開發</div>
+        </div>
+      </div>
+
+      <!-- 17 VR 場景 - wide -->
+      <div class="work-card wide"
+        style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.05) 0%, transparent 50%)">
+        <img class="card-img" src="/assets/17.png" alt="">
+        <span class="card-num">17</span>
+        <div class="card-tags"><span class="card-tag game">Unity</span><span class="card-tag tool">VR</span></div>
+        <div class="card-body">
+          <div class="card-title">VR 場景 1:1 3D 建模</div>
+          <div class="card-desc">Unity 虛擬實境場景製作</div>
+        </div>
+      </div>
+
+      <!-- 18 LoRA Training -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
+        <span class="card-num">18</span>
+        <div class="card-tags"><span class="card-tag ai">AI</span></div>
+        <div class="card-body">
+          <div class="card-title">Character LoRA Training</div>
+          <div class="card-desc">1000+ 訓練素材 · 商用LoRA 模型訓練 </div>
+        </div>
+      </div>
+
+      <!-- 19  -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/19.avif" alt="">
+        <span class="card-num">19</span>
+        <div class="card-tags"><span class="card-tag tool">UIUX</span></div>
+        <div class="card-body">
+          <div class="card-title">App Design</div>
+          <div class="card-desc"></div>
+        </div>
+      </div>
+
+      <!-- 20 Yacht 3D -->
+      <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
+        <img class="card-img" src="/assets/20.png" alt="">
+        <span class="card-num">20</span>
+        <div class="card-tags"><span class="card-tag tool">Blender</span></div>
+        <div class="card-body">
+          <div class="card-title">Yacht Imexus 28 3D 建模</div>
+          <div class="card-desc"> 3D 建模 · Blender</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section" id="exp">
+    <p class="section-label reveal">工作經歷</p>
+    <h2 class="section-heading reveal" style="margin-bottom:48px">EXP.</h2>
+    <div class="timeline reveal">
+
+      <div class="timeline-item">
+        <div class="timeline-year">2024</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-org">接案 / 顧問 · 現在</div>
+          <div class="timeline-title">個人工作室 · ComfyUI工作流設計</div>
+          <div class="timeline-desc">
+            企業 AI 工具培訓、商業 ComfyUI 工作流設計、LoRA 模型訓練。<br>
+            合作企業：Comfy Deploy · Mighty Bear Games · Fun Town 戲谷 · Moshi Mosh AI
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2022</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-org">Avatech Limited · Dec 2021–Dec 2023</div>
+          <div class="timeline-title">Gen AI / Tech Artist / Web Front-End / Unity Developer</div>
+          <div class="timeline-desc">
+            AI 角色生成流程、Live2D & Blender 基礎動作模型、前端 UX/UI 開發、媒體內容撰寫。<br>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2021</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-org">越·創無限 / 思達數學 · May 2021–Nov 2021</div>
+          <div class="timeline-title">Unity Developer</div>
+          <div class="timeline-desc">將 50 套 Flash 兒童數學教材重建為 Unity 互動版本（6–12 歲）</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2020</div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-org">進念·二十面體 · Oct 2020–Mar 2021</div>
+          <div class="timeline-title">Unity Developer — 心經即是巴哈</div>
+          <div class="timeline-desc">
+            香港文化中心大劇院展覽遊戲開發。<br>
+            獲 <strong style="color:var(--neon)">DFA 亞洲設計優異獎 2021</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <p class="section-label reveal">連絡 / 合作</p>
+    <div class="links-section reveal">
       <div>
-        <div class="skill-cat-label">AI & ComfyUI</div>
-        <div class="skill-pills">
-          <span class="skill-pill hot">ComfyUI 工作流</span>
-          <span class="skill-pill">Stable Diffusion</span>
-          <span class="skill-pill hot">LoRA 模型訓練</span>
-          <span class="skill-pill">API</span>
-
+        <h2 class="contact-heading">
+          LET'S<br>BUILD<br><span class="neon">TOGETHER.</span>
+        </h2>
+        <p class="contact-sub">
+          遊戲開發、ComfyUI 工作流、AI 工具項目<br>
+          歡迎來信或直接聯繫討論合作可能。<br>
+          ( 通常 24 小時內回覆。 )
+          ecjojo
+        </p>
+        <div class="collab-chips">
+          <span class="collab-chip">遊戲 / 工具開發</span>
+          <span class="collab-chip">ComfyUI 工作流</span>
+          <span class="collab-chip">AI 教學</span>
         </div>
       </div>
-      <div>
-        <div class="skill-cat-label">媒體創作</div>
-        <div class="skill-pills">
-          <span class="skill-pill">Blender 3D</span>
-          <span class="skill-pill">Live2D</span>
-          <span class="skill-pill">Figma</span>
-          <span class="skill-pill">After Effects</span>
-          <span class="skill-pill">FL Studio</span>
-        </div>
+      <div class="link-list">
+        <a href="mailto:ecjojostudio@gmail.com" class="link-row">
+          <div class="link-info">
+            <div class="link-name">Email</div>
+            <div class="link-handle">ecjojostudio@gmail.com</div>
+          </div>
+          <span class="link-arr">↗</span>
+        </a>
+        <a href="https://linkedin.com/in/ecjojo" class="link-row" target="_blank">
+          <div class="link-info">
+            <div class="link-name">LinkedIn</div>
+            <div class="link-handle">ecjojo</div>
+          </div>
+          <span class="link-arr">↗</span>
+        </a>
+        <a href="https://x.com/ecjojodev" class="link-row" target="_blank">
+          <div class="link-info">
+            <div class="link-name">X / Twitter</div>
+            <div class="link-handle">@ecjojodev</div>
+          </div>
+          <span class="link-arr">↗</span>
+        </a>
+
+        <a href="https://www.youtube.com/@ecjojodev" class="link-row" target="_blank">
+          <div class="link-info">
+            <div class="link-name">YouTube</div>
+            <div class="link-handle">@ecjojodev · 500K+ views</div>
+          </div>
+          <span class="link-arr">↗</span>
+        </a>
+
+        <a href="https://ecjojo.itch.io/" class="link-row" target="_blank">
+          <div class="link-info">
+            <div class="link-name">itch.io</div>
+            <div class="link-handle">遊戲作品</div>
+          </div>
+          <span class="link-arr">↗</span>
+        </a>
+        <a href="https://github.com/ecjojo" class="link-row" target="_blank">
+          <div class="link-info">
+            <div class="link-name">GitHub</div>
+            <div class="link-handle">@ecjojo</div>
+          </div>
+          <span class="link-arr">↗</span>
+        </a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- WORKS -->
-<section class="section" id="works">
-  <p class="section-label reveal">作品集</p>
-  <h2 class="section-heading reveal">WORKS</h2>
+  <footer>
+    <span>© 2026 · Hong Kong</span>
+    <span style="color:var(--neon)">⚡ ECJOJO STUDIO</span>
+    <span><a href="https://discord.gg/2uFuM9UjEJ">Discord 社群</a></span>
+  </footer>
 
-  <div class="works-grid reveal">
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .work-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
 
-    <!-- 1 Factory - tall+wide -->
-         <div class="work-card  wide tall" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
-      <img class="card-img" src="https://img.itch.zone/aW1nLzIzMjA1NzE4LnBuZw==/315x250%23c/4VpYFy.png" alt="">
-      <span class="card-num">03</span>
-      <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
-      <div class="card-body">
-        <div class="card-title">Garden </div>
-        <div class="card-desc">創造你的療癒小花園</div>
-      </div>
-      <a href="https://ecjojo.itch.io/garden" class="card-link" target="_blank">↗</a>
-    </div>
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('in'), 60); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-
-    <!-- 2 Campfire -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.05) 0%, transparent 60%)">
-      <img class="card-img" src="https://img.itch.zone/aW1nLzIzNzI5NTY3LnBuZw==/315x250%23c/jdwj0m.png" alt="">
-      <span class="card-num">02</span>
-      <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
-      <div class="card-body">
-        <div class="card-title">Campfire </div>
-        <div class="card-desc">砍柴 · 生火 · 療癒放鬆</div>
-      </div>
-      <a href="https://ecjojo.itch.io/campfire" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 3 Garden -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.05) 0%, transparent 60%)">
-      <img class="card-img" src="https://img.itch.zone/aW1nLzI0MTA3NDE3LnBuZw==/315x250%23c/OkiImS.png" alt="">
-      <span class="card-num">01</span>
-      <div class="card-tags"><span class="card-tag new">NEW</span><span class="card-tag game">Unity</span></div>
-      <div class="card-body">
-        <div class="card-title">Factory </div>
-        <div class="card-desc">打造你的自動化農場世界 · Nov 2025</div>
-      </div>
-      <a href="https://ecjojo.itch.io/factory" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 4 ComfyUI Workflows - wide -->
-    <div class="work-card wide" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.06) 0%, transparent 50%)">
-         <img class="card-img" src="/assets/03_1.jpeg" alt="">
-      <span class="card-num">03</span>
-      <span class="card-num">04</span>
-      <div class="card-tags"><span class="card-tag ai">ComfyUI</span><span class="card-tag tool">Open Source</span></div>
-      <div class="card-body">
-        <div class="card-title">ComfyUI Workflow Templates — 100 ⭐ GitHub</div>
-        <div class="card-desc">高品質 AI 工作流合集，商業授權可用</div>
-      </div>
-      <a href="https://github.com/ecjojo/ecjojo-comfyui-workflows" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 5 Magic Cat -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.05) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/05.png" alt="">
-      <span class="card-num">05</span>
-      <div class="card-tags"><span class="card-tag ai">SD</span><span class="card-tag tool">Web</span></div>
-      <div class="card-body">
-        <div class="card-title">Magic Cat</div>
-        <div class="card-desc">Stable Diffusion Prompt Clipbook + OpenPose Canvas</div>
-      </div>
-      <a href="https://magic-cat.vercel.app/" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 6 Figma OpenPose -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/06.webp" alt="">
-      <span class="card-num">06</span>
-      <div class="card-tags"><span class="card-tag tool">Figma</span></div>
-      <div class="card-body">
-        <div class="card-title">Figma OpenPose Editor</div>
-        <div class="card-desc">180 Users · AI 姿勢編輯器</div>
-      </div>
-    </div>
-
-    <!-- 7 Discord Bot Template -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/07.webp" alt="">
-      <span class="card-num">07</span>
-      <div class="card-tags"><span class="card-tag ai">ComfyUI</span><span class="card-tag tool">Bot</span></div>
-      <div class="card-body">
-        <div class="card-title">Image Gen Discord Bot</div>
-        <div class="card-desc">ComfyUI + ComfyDeploy API 開源範本</div>
-      </div>
-      <a href="https://github.com/ecjojo/DiscordBot-ComfyDeployAPI-Template" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 8 AI Crystal Ball - tall -->
-    <div class="work-card tall" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.06) 0%, transparent 50%)">
-          <img class="card-img" src="/assets/08.webp" alt="">
-      <span class="card-num">08</span>
-      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag tool">Web</span></div>
-      <div class="card-body">
-        <div class="card-title">AI Crystal Ball 水晶球占卜</div>
-        <div class="card-desc">ChatGPT + AI 圖像生成 + 語音合成</div>
-      </div>
-    </div>
-
-    <!-- 9 Toolbox -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/09.png" alt="">
-      <span class="card-num">09</span>
-      <div class="card-tags"><span class="card-tag tool">Web</span></div>
-      <div class="card-body">
-        <div class="card-title">Toolbox</div>
-        <div class="card-desc">Emoji Clipbook 工具網站</div>
-      </div>
-      <a href="https://ecjojo.github.io/toolbox/" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 10 Heart Sutra Game - wide -->
-    <div class="work-card wide" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.05) 0%, transparent 50%)">
-      <span class="card-num">10</span>
-      <div class="card-tags"><span class="card-tag game">Unity</span><span class="card-tag tool">DFA Award</span></div>
-      <div class="card-body">
-        <div class="card-title">心經即是巴哈 — DFA 亞洲設計優異獎 2021</div>
-        <div class="card-desc">香港文化中心大劇院 互動裝置展覽遊戲</div>
-      </div>
-    </div>
-
-    <!-- 11 Custom Node -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/03_1.jpeg" alt="">
-      <span class="card-num">11</span>
-      <div class="card-tags"><span class="card-tag ai">ComfyUI</span></div>
-      <div class="card-body">
-        <div class="card-title">Custom Node Template</div>
-        <div class="card-desc">ComfyUI 節點開發範本</div>
-      </div>
-      <a href="https://github.com/ecjojo/ecjojo-example-nodes" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 12 Lunar Calendar -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/12.png" alt="">
-      <span class="card-num">12</span>
-      <div class="card-tags"><span class="card-tag tool">Web</span></div>
-      <div class="card-body">
-        <div class="card-title">Lunar Calendar 農曆</div>
-        <div class="card-desc">農曆查詢網站</div>
-      </div>
-      <a href="https://eccalendar.vercel.app/" class="card-link" target="_blank">↗</a>
-    </div>
-
-    <!-- 13 AI Waifu - tall -->
-    <div class="work-card tall" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.07) 0%, transparent 50%)">
-          <img class="card-img" src="/assets/13_1.webp" alt="">
-      <span class="card-num">13</span>
-      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag ai">SD</span></div>
-      <div class="card-body">
-        <div class="card-title">AI Waifu Project</div>
-        <div class="card-desc">設計具有個性的 AI 角色 · Stable Diffusion + ChatGPT</div>
-      </div>
-    </div>
-
-    <!-- 14 AI Influencer -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.05) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/14.webp" alt="">
-      <span class="card-num">14</span>
-      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag ai">SD</span></div>
-      <div class="card-body">
-        <div class="card-title">AI Influencer Project</div>
-        <div class="card-desc">Stable Diffusion 虛擬網紅</div>
-      </div>
-    </div>
-
-    <!-- 15 English Desk -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/15.jpeg" alt="">
-      <span class="card-num">15</span>
-      <div class="card-tags"><span class="card-tag ai">AI</span><span class="card-tag tool">Web</span></div>
-      <div class="card-body">
-        <div class="card-title">English Desk</div>
-        <div class="card-desc">AI 英語學習工具</div>
-      </div>
-    </div>
-
-    <!-- 16 Chrome Extension -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/16.png" alt="">
-      <span class="card-num">16</span>
-      <div class="card-tags"><span class="card-tag tool">Extension</span></div>
-      <div class="card-body">
-        <div class="card-title">Vision Anything</div>
-        <div class="card-desc">Chrome Extension 開發</div>
-      </div>
-    </div>
-
-    <!-- 17 VR 場景 - wide -->
-    <div class="work-card wide" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.05) 0%, transparent 50%)">
-          <img class="card-img" src="/assets/17.png" alt="">
-      <span class="card-num">17</span>
-      <div class="card-tags"><span class="card-tag game">Unity</span><span class="card-tag tool">VR</span></div>
-      <div class="card-body">
-        <div class="card-title">VR 場景 1:1 3D 建模</div>
-        <div class="card-desc">Unity 虛擬實境場景製作</div>
-      </div>
-    </div>
-
-    <!-- 18 LoRA Training -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, transparent 60%)">
-      <span class="card-num">18</span>
-      <div class="card-tags"><span class="card-tag ai">AI</span></div>
-      <div class="card-body">
-        <div class="card-title">Character LoRA Training</div>
-        <div class="card-desc">1000+ 訓練素材 · 商用LoRA 模型訓練 </div>
-      </div>
-    </div>
-
-    <!-- 19  -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(255,45,120,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/19.avif" alt="">
-      <span class="card-num">19</span>
-      <div class="card-tags"><span class="card-tag tool">UIUX</span></div>
-      <div class="card-body">
-        <div class="card-title">App Design</div>
-        <div class="card-desc"></div>
-      </div>
-    </div>
-
-    <!-- 20 Yacht 3D -->
-    <div class="work-card" style="--card-accent: linear-gradient(135deg, rgba(184,255,0,0.04) 0%, transparent 60%)">
-          <img class="card-img" src="/assets/20.png" alt="">
-      <span class="card-num">20</span>
-      <div class="card-tags"><span class="card-tag tool">Blender</span></div>
-      <div class="card-body">
-        <div class="card-title">Yacht Imexus 28 3D 建模</div>
-        <div class="card-desc"> 3D 建模 · Blender</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section class="section" id="exp">
-  <p class="section-label reveal">工作經歷</p>
-  <h2 class="section-heading reveal" style="margin-bottom:48px">EXP.</h2>
-  <div class="timeline reveal">
-
-    <div class="timeline-item">
-      <div class="timeline-year">2024</div>
-      <div class="timeline-dot"></div>
-      <div class="timeline-content">
-        <div class="timeline-org">接案 / 顧問 · 現在</div>
-        <div class="timeline-title">個人工作室 · ComfyUI工作流設計</div>
-        <div class="timeline-desc">
-          企業 AI 工具培訓、商業 ComfyUI 工作流設計、LoRA 模型訓練。<br>
-          合作企業：Comfy Deploy · Mighty Bear Games · Fun Town 戲谷 · Moshi Mosh AI
-        </div>
-      </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-year">2021</div>
-      <div class="timeline-dot"></div>
-      <div class="timeline-content">
-        <div class="timeline-org">Avatech Limited · Dec 2021–Dec 2023</div>
-        <div class="timeline-title">Gen AI / Tech Artist / Web Front-End / Unity Developer</div>
-        <div class="timeline-desc">
-          AI 角色生成流程、Live2D & Blender 基礎動作模型、前端 UX/UI 開發、媒體內容撰寫。<br>
-          跨國協作：香港、美國、台灣、日本藝術家
-        </div>
-      </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-year">2021</div>
-      <div class="timeline-dot"></div>
-      <div class="timeline-content">
-        <div class="timeline-org">越·創無限 / 思達數學 · May 2021–Nov 2021</div>
-        <div class="timeline-title">Unity Developer</div>
-        <div class="timeline-desc">將 50 套 Flash 兒童數學教材重建為 Unity 互動版本（6–12 歲）</div>
-      </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-year">2020</div>
-      <div class="timeline-dot"></div>
-      <div class="timeline-content">
-        <div class="timeline-org">進念·二十面體 · Oct 2020–Mar 2021</div>
-        <div class="timeline-title">Unity Developer — 心經即是巴哈</div>
-        <div class="timeline-desc">
-          香港文化中心大劇院展覽遊戲開發。<br>
-          獲 <strong style="color:var(--neon)">DFA 亞洲設計優異獎 2021</strong>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="section" id="contact">
-  <p class="section-label reveal">連絡 / 合作</p>
-  <div class="links-section reveal">
-    <div>
-      <h2 class="contact-heading">
-        LET'S<br>BUILD<br><span class="neon">TOGETHER.</span>
-      </h2>
-      <p class="contact-sub">
-        遊戲開發、ComfyUI 工作流、AI 工具項目<br>
-        歡迎來信或直接聯繫討論合作可能。<br>
-        ( 通常 24 小時內回覆。 )
-        ecjojo
-      </p>
-      <div class="collab-chips">
-        <span class="collab-chip">遊戲 / 工具開發</span>
-        <span class="collab-chip">ComfyUI 工作流</span>
-        <span class="collab-chip">AI 教學</span>
-      </div>
-    </div>
-    <div class="link-list">
-      <a href="mailto:ecjojostudio@gmail.com" class="link-row">
-        <div class="link-info">
-          <div class="link-name">Email</div>
-          <div class="link-handle">ecjojostudio@gmail.com</div>
-        </div>
-        <span class="link-arr">↗</span>
-      </a>
-            <a href="https://linkedin.com/in/ecjojo" class="link-row" target="_blank">
-        <div class="link-info">
-          <div class="link-name">LinkedIn</div>
-          <div class="link-handle">ecjojo</div>
-        </div>
-        <span class="link-arr">↗</span>
-      </a>
-            <a href="https://x.com/ecjojodev" class="link-row" target="_blank">
-        <div class="link-info">
-          <div class="link-name">X / Twitter</div>
-          <div class="link-handle">@ecjojodev</div>
-        </div>
-        <span class="link-arr">↗</span>
-      </a>
-      <a href="https://ecjojo.itch.io/" class="link-row" target="_blank">
-        <div class="link-info">
-          <div class="link-name">itch.io</div>
-          <div class="link-handle">遊戲作品</div>
-        </div>
-        <span class="link-arr">↗</span>
-      </a>
-      <a href="https://www.patreon.com/ecjojo" class="link-row" target="_blank">
-        <div class="link-info">
-          <div class="link-name">Patreon</div>
-          <div class="link-handle">ComfyUI 教學 · 300 會員</div>
-        </div>
-        <span class="link-arr">↗</span>
-      </a>
-      <a href="https://www.youtube.com/@ecjojodev" class="link-row" target="_blank">
-        <div class="link-info">
-          <div class="link-name">YouTube</div>
-          <div class="link-handle">@ecjojodev · 500K+ views</div>
-        </div>
-        <span class="link-arr">↗</span>
-      </a>
-
-
-            <a href="https://github.com/ecjojo" class="link-row" target="_blank">
-        <div class="link-info">
-          <div class="link-name">GitHub</div>
-          <div class="link-handle">@ecjojo</div>
-        </div>
-        <span class="link-arr">↗</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <span>© 2026 · Hong Kong</span>
-  <span style="color:var(--neon)">⚡ ECJOJO STUDIO</span>
-  <span><a href="https://discord.gg/2uFuM9UjEJ">Discord 社群</a></span>
-</footer>
-
-<script>
-// Cursor
-const cursor = document.getElementById('cursor');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top  = e.clientY + 'px';
-});
-document.querySelectorAll('a, button, .work-card').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('big'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
-});
-
-// Scroll reveal
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) { setTimeout(() => e.target.classList.add('in'), 60); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-// Fix stats typo (duplicated stat)
-document.querySelectorAll('.stat').forEach((s, i) => {
-  if (i === 1) {
-    const nums = s.querySelectorAll('.stat-num');
-    if (nums.length > 1) nums[0].remove();
-    // find extra empty stat-num
-    s.querySelectorAll('.stat-num').forEach((n, j) => { if(j>0) n.remove(); });
-  }
-});
-</script>
+    // Fix stats typo (duplicated stat)
+    document.querySelectorAll('.stat').forEach((s, i) => {
+      if (i === 1) {
+        const nums = s.querySelectorAll('.stat-num');
+        if (nums.length > 1) nums[0].remove();
+        // find extra empty stat-num
+        s.querySelectorAll('.stat-num').forEach((n, j) => { if (j > 0) n.remove(); });
+      }
+    });
+  </script>
 </body>
+
 </html>

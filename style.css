@@ -213,6 +213,74 @@ h1 {
   background: #61d60a;
 }
 
+/* Utility tools */
+.tools-section {
+  margin-top: 34px;
+}
+
+.tools-section h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.tool-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tool-button {
+  min-width: 0;
+  min-height: 96px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--text);
+  background: #ffffff;
+  border: 3px solid #d9f99d;
+  border-radius: 20px;
+  box-shadow: 0 6px 0 #b6e85a;
+  text-decoration: none;
+  transform: translateY(0);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.tool-button:hover {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #b6e85a;
+  background: #f7fee7;
+  border-color: var(--green);
+}
+
+.tool-button:active {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 #b6e85a;
+}
+
+.tool-emoji {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.tool-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .icon {
   width: 28px;
   height: 28px;
@@ -327,5 +395,22 @@ footer p {
   .link-button {
     min-height: 56px;
     font-size: 14px;
+  }
+
+  .tool-links {
+    gap: 8px;
+  }
+
+  .tool-button {
+    min-height: 88px;
+    border-radius: 16px;
+  }
+
+  .tool-emoji {
+    font-size: 28px;
+  }
+
+  .tool-name {
+    font-size: 11px;
   }
 }

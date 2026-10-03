@@ -166,8 +166,8 @@ button{font:inherit}
 .art-arrow{position:absolute;right:10px;bottom:10px;display:grid;place-items:center;width:31px;height:31px;border-radius:50%;background:#151612cc;color:var(--text);font-size:16px;backdrop-filter:blur(8px)}
 .project-info>a{color:var(--gold);font-size:17px;padding:0 3px}
 .articles-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:0 0 85px}
-.article-card{overflow:hidden;background:#ffffff07;border:1px solid var(--line);border-radius:18px;transition:transform .2s,border-color .2s}
-.article-card:hover{transform:translateY(-3px);border-color:#f4c95d66}
+.article-card{overflow:hidden;background:#ffffff07;border:1px solid var(--line);border-radius:18px;transition:transform .2s}
+.article-card:hover{transform:translateY(-3px)}
 .articles-list:has(.article-card:only-child){grid-template-columns:minmax(0,1fr)}
 .article-card:only-child{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);min-height:340px;background:linear-gradient(115deg,#ffffff0a,#ffffff03)}
 .article-card:only-child .article-cover{display:grid;place-items:center;min-height:100%;aspect-ratio:auto;border-right:1px solid var(--line);background:radial-gradient(ellipse at 50% 50%,#f4c95d18,transparent 58%),linear-gradient(145deg,#24251f,#171814)}

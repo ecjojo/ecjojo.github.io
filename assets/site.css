@@ -12,7 +12,7 @@ button{font:inherit}
 .container{width:min(calc(100% - 40px),var(--max));margin-inline:auto}
 .site-header{height:76px;position:sticky;top:0;z-index:20;background:#151612ed;border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
 .header-inner{height:100%;display:flex;align-items:center;justify-content:space-between}
-.brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.05em}
+.brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:19px;line-height:1.5;letter-spacing:-.05em;flex:none;overflow:visible;padding-block:.08em}
 .brand-mark{display:block;width:34px;height:34px;object-fit:contain;transform:rotate(-8deg)}
 .desktop-nav{display:flex;align-items:center;gap:34px;color:var(--cream-muted);font-size:14px;font-weight:600}
 .desktop-nav a{transition:color .18s}

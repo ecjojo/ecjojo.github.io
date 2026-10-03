@@ -1,0 +1,31 @@
+{
+  "name": "ecjojo",
+  "role": "獨立開發者",
+  "location": "HK",
+  "bio": "做過遊戲，也做過 AI 生成相關顧問工作。現在主要開發自己的產品 OmniRPG。",
+  "skills": ["Unity", "ComfyUI", "Stable Diffusion", "Blender", "React", "Next.js", "AI", "Game Dev"],
+  "timeline": [
+    {
+      "title": "生成 AI 與產品開發",
+      "description": "在生成 AI 與產品開發領域累積工作經驗。",
+      "companies": ["Moshi Mosh AI", "戲谷", "Comfy Deploy", "Mighty Bear Games", "Avatech"]
+    },
+    {
+      "title": "製作小型遊戲",
+      "description": "用小型作品嘗試不同玩法與創作點子。",
+      "companies": ["ecjojo games"]
+    },
+    {
+      "title": "OmniRPG",
+      "description": "打造讓創作者製作 AI 文字遊戲的平台。",
+      "companies": ["OmniRPG 萬象"]
+    }
+  ],
+  "socials": [
+    { "label": "GitHub", "url": "https://github.com/ecjojo", "icon": "github" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/ecjojo/", "icon": "linkedin" },
+    { "label": "Blog", "url": "https://ecjojo.blogspot.com/", "icon": "blog" },
+    { "label": "Patreon", "url": "https://www.patreon.com/c/ecjojoDev", "icon": "patreon" },
+    { "label": "Discord", "url": "https://discord.gg/2ZTYwAYaka", "icon": "discord" }
+  ]
+}

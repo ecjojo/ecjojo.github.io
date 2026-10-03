@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Garden",
+    "description": "慢慢打造自己的小花園",
+    "image": "assets/portfolio/garden-gameplay.webp",
+    "url": "https://ecjojo.itch.io/garden"
+  },
+  {
+    "title": "Campfire",
+    "description": "劈柴、添柴，享受營火時光",
+    "image": "assets/portfolio/campfire-gameplay.webp",
+    "url": "https://ecjojo.itch.io/campfire"
+  },
+  {
+    "title": "Factory",
+    "description": "串連機器，做出三色豆",
+    "image": "assets/portfolio/factory-gameplay.webp",
+    "url": "https://ecjojo.itch.io/factory"
+  }
+]

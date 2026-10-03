@@ -1,0 +1,3 @@
+# 本機瀏覽器檢查產生的截圖與記錄
+/.playwright-cli/
+/output/playwright/
